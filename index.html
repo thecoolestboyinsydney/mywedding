@@ -1,143 +1,1567 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Kuang &amp; Yang Wedding Invitation</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Noto+Serif+SC:wght@500&display=swap" rel="stylesheet">
-<style>
-  :root{
-    box-sizing:border-box;
-    padding-top:env(safe-area-inset-top,0px);
-    padding-bottom:env(safe-area-inset-bottom,0px);
-    --bg1:#fdf2f4; --bg2:#f4dde3; --card:#fffdfa;
-    --ink:#4a1f2a; --ink-soft:#8a5763; --gold:#b8895a; --gold-soft:#cdad82;
-  }
-  :root:not([data-theme="light"]){
-    @media (prefers-color-scheme: dark){
-      --bg1:#241218; --bg2:#37181f; --card:#2b1017;
-      --ink:#f4e2e5; --ink-soft:#d3aab3; --gold:#dcb787; --gold-soft:#c99a6c;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4dde3" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#37181f" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8C%B9%3C/text%3E%3C/svg%3E">
+  <title>Kuang &amp; Yang Wedding Invitation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&family=Dancing+Script:wght@600;700&family=Noto+Serif+SC:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg1: #fdf2f4; --bg2: #f4dde3; --card: #fffdfa;
+      --ink: #4a1f2a; --ink-soft: #8a5763;
+      --gold: #b8895a; --gold-soft: #cdad82;
+      --btn-grad-start: #c59868; --btn-grad-end: #986533;
     }
-  }
-  :root[data-theme="dark"]{
-    --bg1:#241218; --bg2:#37181f; --card:#2b1017;
-    --ink:#f4e2e5; --ink-soft:#d3aab3; --gold:#dcb787; --gold-soft:#c99a6c;
-  }
-  html{scroll-padding-top:env(safe-area-inset-top,0px)}
-  *{box-sizing:border-box}
-  body{
-    margin:0; min-height:100vh; overflow-x:hidden;
-    background:linear-gradient(165deg,var(--bg1),var(--bg2));
-    display:flex; align-items:center; justify-content:center;
-    padding:48px 20px calc(48px + env(safe-area-inset-bottom,0px));
-    font-family:'Cormorant Garamond',serif;
-  }
-  .petals{position:fixed; inset:0; overflow:hidden; pointer-events:none; z-index:3}
-  .petal{
-    position:absolute; top:-8%; left:var(--x);
-    width:var(--s); height:calc(var(--s) * 1.25);
-    border-radius:0% 60% 0% 60%;
-    opacity:var(--o);
-    animation:fall var(--dur) linear var(--delay) infinite;
-    box-shadow:inset -2px -2px 4px rgba(0,0,0,.08);
-  }
-  @keyframes fall{
-    0%  {transform:translate(0,-10vh) rotate(0deg)}
-    25% {transform:translate(var(--sway),25vh) rotate(90deg)}
-    50% {transform:translate(calc(var(--sway) * -1),50vh) rotate(180deg)}
-    75% {transform:translate(var(--sway),75vh) rotate(270deg)}
-    100%{transform:translate(0,112vh) rotate(360deg)}
-  }
-  @media (prefers-reduced-motion: reduce){ .petal{animation:none; display:none} }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg1: #241218; --bg2: #37181f; --card: #2b1017;
+        --ink: #f4e2e5; --ink-soft: #d3aab3;
+        --gold: #dcb787; --gold-soft: #c99a6c;
+      }
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0;
+      width: 100%; height: 100%;
+      overflow: hidden;
+      overscroll-behavior: none;
+      font-family: 'Cormorant Garamond', serif;
+      background: linear-gradient(165deg, var(--bg1), var(--bg2));
+      -webkit-font-smoothing: antialiased;
+      user-select: none;
+    }
 
-  .card{
-    position:relative; z-index:2; isolation:isolate;
-    width:100%; max-width:420px;
-    background:var(--card);
-    border:1px solid color-mix(in srgb, var(--gold) 45%, transparent);
-    border-radius:3px;
-    padding:52px 38px 44px;
-    text-align:center;
-    box-shadow:0 30px 60px -20px rgba(60,20,30,.35);
-  }
-  .xi{
-    font-family:'Noto Serif SC',serif; font-weight:500;
-    font-size:clamp(48px,11vw,64px); line-height:1;
-    color:var(--gold);
-    text-shadow:0 1px 0 color-mix(in srgb, var(--gold) 60%, transparent);
-    margin:0 0 6px;
-  }
-  .xx{
-    font-style:italic; letter-spacing:.35em;
-    font-size:13px; color:var(--ink-soft); margin:0 0 26px;
-  }
-  .eyebrow{
-    font-size:13px; letter-spacing:.25em; font-weight:500;
-    color:var(--ink-soft); margin:0 0 14px;
-  }
-  .names{
-    font-style:italic; font-weight:600;
-    font-size:clamp(32px,7.5vw,46px); color:var(--ink);
-    margin:0 0 28px; line-height:1.15;
-  }
-  .divider{
-    display:flex; align-items:center; gap:10px;
-    margin:26px auto; width:70%;
-  }
-  .divider::before,.divider::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold-soft),transparent)}
-  .divider span{width:6px;height:6px;background:var(--gold);transform:rotate(45deg);flex:none}
+    #page1 {
+      position: absolute; inset: 0;
+      display: flex;
+      padding: 40px 20px calc(40px + env(safe-area-inset-bottom, 0px));
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      transition: opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+      z-index: 10;
+    }
+    #page1.hidden {
+      opacity: 0;
+      transform: scale(0.93);
+      pointer-events: none;
+    }
 
-  .date{font-size:22px; color:var(--ink); letter-spacing:.06em; margin:0 0 10px}
-  .line{font-size:17px; color:var(--ink-soft); font-style:italic; margin:0 0 6px}
-  .place{font-size:18px; color:var(--ink); font-weight:500; margin:0 0 4px}
-  .addr{font-size:14px; color:var(--ink-soft); margin:0}
-</style>
+    .card {
+      position: relative;
+      z-index: 10;
+      margin: auto;
+      width: 100%; max-width: 420px;
+      background: var(--card);
+      border: 1px solid color-mix(in srgb, var(--gold) 45%, transparent);
+      border-radius: 4px;
+      padding: 48px 36px 42px;
+      text-align: center;
+      box-shadow: 0 32px 70px -16px rgba(50, 15, 25, 0.35);
+      transition: opacity 1.3s ease 0.45s, transform 1.3s cubic-bezier(0.45, 0, 0.7, 0.4) 0.45s;
+    }
+    .card.blown {
+      opacity: 0;
+      transform: translate(110px, -130px) rotate(6deg);
+    }
+    .xi {
+      font-family: 'Noto Serif SC', serif;
+      font-weight: 600;
+      font-size: clamp(52px, 12vw, 68px);
+      line-height: 1;
+      color: var(--gold);
+      text-shadow: 0 1px 0 rgba(255,255,255,0.4);
+      margin: 0 0 20px;
+      letter-spacing: 0.05em;
+    }
+    .eyebrow {
+      font-size: 13px; letter-spacing: .25em; font-weight: 500;
+      color: var(--ink-soft); margin: 0 0 14px;
+    }
+    .names {
+      font-style: italic; font-weight: 600;
+      font-size: clamp(32px, 7.5vw, 46px); color: var(--ink);
+      margin: 0 0 24px; line-height: 1.15;
+    }
+    .divider {
+      display: flex; align-items: center; gap: 10px;
+      margin: 22px auto; width: 70%;
+    }
+    .divider::before, .divider::after {
+      content: ""; flex: 1; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-soft), transparent);
+    }
+    .divider span {
+      width: 6px; height: 6px; background: var(--gold);
+      transform: rotate(45deg); flex: none;
+    }
+    .date { font-size: 21px; color: var(--ink); letter-spacing: .06em; margin: 0 0 10px; }
+    .line { font-size: 16.5px; color: var(--ink-soft); font-style: italic; margin: 0 0 6px; }
+    .place { font-size: 17.5px; color: var(--ink); font-weight: 500; margin: 0 0 4px; }
+    .addr { font-size: 13.5px; color: var(--ink-soft); margin: 0 0 4px; }
+
+    .btn-wrapper {
+      position: relative;
+      margin-top: 34px;
+      display: flex;
+      justify-content: center;
+      z-index: 50;
+    }
+    .accept-btn {
+      position: relative;
+      z-index: 50;
+      appearance: none;
+      outline: none;
+      border: none;
+      cursor: pointer;
+      touch-action: manipulation;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: 19px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #fffaf3;
+      background: linear-gradient(180deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%);
+      padding: 13px 48px;
+      border-radius: 4px;
+      border-top: 3.5px solid #ffecce;
+      border-left: 1px solid rgba(255,255,255,0.4);
+      border-right: 1px solid rgba(0,0,0,0.25);
+      box-shadow:
+        0 6px 0 #6e441d,
+        0 14px 26px rgba(50, 15, 25, 0.42),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+      transform: translateY(0);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.25s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .accept-btn:hover { filter: brightness(1.06); }
+    .accept-btn:active {
+      transform: translateY(4px);
+      box-shadow:
+        0 2px 0 #6e441d,
+        0 6px 14px rgba(50, 15, 25, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+
+    #mainCanvas {
+      position: fixed; inset: 0;
+      width: 100%; height: 100%;
+      z-index: 55;
+      pointer-events: none;
+    }
+
+    #page2Overlay {
+      position: fixed; inset: 0;
+      background: radial-gradient(circle at 50% 48%, #280b13 0%, #14050a 60%, #0a0104 100%);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 20;
+      transition: opacity 1.5s ease;
+    }
+    #page2Overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .controls {
+      position: fixed; bottom: 24px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; gap: 14px;
+      z-index: 60;
+      opacity: 0; pointer-events: none;
+      transition: opacity 1s ease 0.4s;
+    }
+    .controls.visible { opacity: 1; pointer-events: auto; }
+    .ctrl-btn {
+      background: rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 30px;
+      color: #f7e6eb;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      letter-spacing: 0.1em;
+      padding: 8px 18px;
+      cursor: pointer;
+      touch-action: manipulation;
+      display: flex; align-items: center; gap: 6px;
+      transition: all 0.25s ease;
+    }
+    .ctrl-btn:hover {
+      background: rgba(255, 255, 255, 0.26);
+      transform: translateY(-2px);
+    }
+  </style>
 </head>
 <body>
-  <div class="petals" id="petals"></div>
 
-  <div class="card">
-    <p class="xi">囍</p>
-    <p class=""></p>
-    <p class="eyebrow">YOU ARE INVITED TO THE WEDDING OF</p>
-    <p class="names">Kuang &amp; Yang</p>
+  <div id="page1">
+    <div class="card" id="cardElem">
+      <div class="xi">囍</div>
+      <div class="eyebrow">YOU ARE INVITED TO THE WEDDING OF</div>
+      <div class="names">Kuang &amp; Yang</div>
+      <div class="divider"><span></span></div>
+      <div class="date">25 November 2026</div>
+      <div class="line">Ceremony at 11:00 a.m.</div>
+      <div class="place">St. Dominic's Catholic Church</div>
+      <div class="addr">108 The Crescent, Homebush West NSW 2140</div>
+      <div class="divider"><span></span></div>
+      <div class="line">Reception at 1:00 p.m.</div>
+      <div class="place">Hey Restaurant Burwood</div>
 
-    <div class="divider"><span></span></div>
-
-    <p class="date">25 November 2026</p>
-    <p class="line">Ceremony at 11:00 a.m.</p>
-    <p class="place">St. Dominic&rsquo;s Catholic Church</p>
-    <p class="addr">108 The Crescent, Homebush West NSW 2140</p>
-
-    <div class="divider"><span></span></div>
-
-    <p class="line">Reception at 1:00 p.m.</p>
-    <p class="place">Hey Restaurant Burwood</p>
+      <div class="btn-wrapper">
+        <button class="accept-btn" id="acceptBtn">Accept</button>
+      </div>
+    </div>
   </div>
 
-<script>
-(function(){
-  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var colors = ['#e8aab4','#d9808f','#c85c72','#8b3a4a','#f0c3cb'];
-  var wrap = document.getElementById('petals');
-  var n = window.innerWidth < 500 ? 18 : 28;
-  for (var i = 0; i < n; i++){
-    var p = document.createElement('div');
-    p.className = 'petal';
-    var size = 9 + Math.random()*13;
-    var dur = 8 + Math.random()*9;
-    var delay = -Math.random()*dur;
-    var x = Math.random()*100;
-    var sway = (24 + Math.random()*46) + 'px';
-    var o = (0.5 + Math.random()*0.4).toFixed(2);
-    var c1 = colors[Math.floor(Math.random()*colors.length)];
-    var c2 = colors[Math.floor(Math.random()*colors.length)];
-    p.style.cssText = '--s:'+size+'px;--dur:'+dur+'s;--delay:'+delay+'s;--x:'+x+'vw;--sway:'+sway+';--o:'+o+';background:linear-gradient(135deg,'+c1+','+c2+')';
-    wrap.appendChild(p);
-  }
-})();
-</script>
+  <canvas id="mainCanvas"></canvas>
+  <div id="page2Overlay"></div>
+
+  <div class="controls" id="controls">
+    <button class="ctrl-btn" id="soundToggle">
+      <span id="soundIcon">🔔</span> <span id="soundText">Sound On</span>
+    </button>
+    <button class="ctrl-btn" id="backBtn">
+      <span>✉️</span> View Invitation
+    </button>
+  </div>
+
+  <script>
+  (function(){
+    const canvas = document.getElementById('mainCanvas');
+    const ctx = canvas.getContext('2d');
+    const page1 = document.getElementById('page1');
+    const page2Overlay = document.getElementById('page2Overlay');
+    const cardElem = document.getElementById('cardElem');
+    const acceptBtn = document.getElementById('acceptBtn');
+    const controls = document.getElementById('controls');
+    const soundToggle = document.getElementById('soundToggle');
+    const soundText = document.getElementById('soundText');
+    const soundIcon = document.getElementById('soundIcon');
+    const backBtn = document.getElementById('backBtn');
+
+    let currentState = 'invitation'; // 'invitation' | 'windout' | 'scroll'
+
+    let W = 0, H = 0, dpr = 1;
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = window.innerWidth;
+      H = window.innerHeight;
+      canvas.width = W * dpr;
+      canvas.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    const fontsReady = (document.fonts && document.fonts.load)
+      ? Promise.all([
+          document.fonts.load('italic 600 120px "Cormorant Garamond"'),
+          document.fonts.load('italic 500 120px "Cormorant Garamond"'),
+          document.fonts.load('700 120px "Dancing Script"')
+        ]).catch(function(){})
+      : Promise.resolve();
+
+    // ==========================================
+    // 按钮几何 + 花瓣山高度场（第一页）
+    // ==========================================
+    let btnRect = { left: 0, right: 0, top: 0, bottom: 0, width: 0, cx: 0 };
+
+    const PILE_BINS = 30;
+    const pileHeights = new Float32Array(PILE_BINS);
+    let pileBinW = 0, pileLeft = 0, pileRight = 0, pileTop = 0;
+
+    const p1Petals = [];
+    const pileOrder = [];
+
+    function syncPileGeometry() {
+      const inset = 4;
+      const nl = btnRect.left + inset;
+      const nr = btnRect.right - inset;
+      const nw = Math.max(10, nr - nl);
+      const changed = pileBinW === 0 || Math.abs(nw - pileBinW * PILE_BINS) > 1.5;
+      pileLeft = nl; pileRight = nr; pileTop = btnRect.top;
+      if (changed) { pileBinW = nw / PILE_BINS; pileHeights.fill(0); }
+      return changed;
+    }
+
+    function pileHeightAt(x) {
+      if (pileBinW === 0 || x <= pileLeft || x >= pileRight) return -1;
+      const t = (x - pileLeft) / pileBinW - 0.5;
+      let i = Math.floor(t);
+      if (i < 0) i = 0;
+      if (i > PILE_BINS - 2) i = PILE_BINS - 2;
+      let f = t - i;
+      if (f < 0) f = 0; if (f > 1) f = 1;
+      return pileHeights[i] + (pileHeights[i + 1] - pileHeights[i]) * f;
+    }
+
+    function pileSlopeAt(x) {
+      const hL = pileHeightAt(x - 5), hR = pileHeightAt(x + 5);
+      if (hL < 0 && hR >= 0) return 1.4;
+      if (hR < 0 && hL >= 0) return -1.4;
+      if (hL < 0 || hR < 0) return 0;
+      return (hR - hL) / 10;
+    }
+
+    function depositAt(x, th) {
+      if (pileBinW === 0) return;
+      const t = (x - pileLeft) / pileBinW - 0.5;
+      let c = Math.round(t);
+      if (c < 0) c = 0; if (c > PILE_BINS - 1) c = PILE_BINS - 1;
+      const add = function(i, w) { if (i >= 0 && i < PILE_BINS) pileHeights[i] += th * w; };
+      add(c - 1, 0.22); add(c, 0.56); add(c + 1, 0.22);
+    }
+
+    function updateButtonRect() {
+      if (!acceptBtn) return;
+      const r = acceptBtn.getBoundingClientRect();
+      btnRect = {
+        left: r.left, right: r.right, top: r.top, bottom: r.bottom,
+        width: r.width, cx: (r.left + r.right) / 2
+      };
+      if (syncPileGeometry() && currentState === 'invitation') softResetPile();
+    }
+    page1.addEventListener('scroll', updateButtonRect, { passive: true });
+
+    window.addEventListener('resize', function() {
+      resize();
+      updateButtonRect();
+      if (currentState === 'scroll' && scrollLayout) {
+        const idx = (scrollPhase === 'writing') ? curCharIdx : scrollLayout.totalChars;
+        scrollLayout = null;
+        buildScrollLayout();
+        if (scrollPhase === 'writing' && scrollLayout) {
+          writeElapsed = idx > 0 ? scrollLayout.charEnd[idx - 1] : 0;
+        }
+      }
+    });
+
+    // ==========================================
+    // 背景音乐：《渡情》伴奏版（循环播放）
+    // 将伴奏 MP3 重命名为 duqing-instrumental.mp3，
+    // 与本 HTML 文件放在同一目录下即可。
+    // ==========================================
+    const bgm = new Audio('duqing-instrumental.mp3');
+    bgm.loop = true;
+    bgm.volume = 0.38;
+    bgm.preload = 'auto';
+    let bgmStarted = false;
+
+    function startBgm() {
+      if (bgmStarted) return;
+      bgmStarted = true;
+      if (soundEnabled) {
+        bgm.play().catch(function(){ /* 文件缺失时静默失败 */ });
+      }
+    }
+
+    // 首次任意用户手势启动背景音乐（浏览器自动播放策略要求）
+    window.addEventListener('pointerdown', startBgm, { once: true });
+
+    // ==========================================
+    // 音效合成引擎
+    // ==========================================
+    let audioCtx = null;
+    let soundEnabled = true;
+    function initAudio() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+    function playChime(freq, duration) {
+      freq = freq || 587.33; duration = duration || 1.2;
+      if (!soundEnabled || !audioCtx) return;
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(freq * 1.5, audioCtx.currentTime + duration * 0.3);
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(); osc.stop(audioCtx.currentTime + duration);
+      } catch(e){}
+    }
+    function playPop() {
+      if (!soundEnabled || !audioCtx) return;
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(140 + Math.random() * 80, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.3);
+        gain.gain.setValueAtTime(0.07, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+      } catch(e){}
+    }
+    // 声音开关同时控制背景音乐与音效
+    soundToggle.addEventListener('click', function() {
+      soundEnabled = !soundEnabled;
+      soundText.textContent = soundEnabled ? 'Sound On' : 'Muted';
+      soundIcon.textContent = soundEnabled ? '🔔' : '🔕';
+      if (soundEnabled) {
+        initAudio();
+        if (bgmStarted) bgm.play().catch(function(){});
+      } else {
+        bgm.pause();
+      }
+    });
+
+    // ==========================================
+    // 玫瑰花瓣：8 色 × 3 形 = 24 种精灵图（预渲染）
+    // ==========================================
+    const PETAL_COLORS = [
+      { light: '#f7c6d2', c1: '#e08ba0', deep: '#a63e5c' },  // 粉玫瑰
+      { light: '#f4b8c8', c1: '#d67087', deep: '#93304b' },  // 艳粉
+      { light: '#fad6de', c1: '#eda6b6', deep: '#c06d81' },  // 浅粉
+      { light: '#f2a5b8', c1: '#cf5c76', deep: '#8a2943' },  // 玫红
+      { light: '#fde5ea', c1: '#f4c3ce', deep: '#d795a6' },  // 樱粉
+      { light: '#f9d3c8', c1: '#e79c8c', deep: '#b0604c' },  // 珊瑚粉
+      { light: '#efa7b4', c1: '#c94f66', deep: '#7e1e36' },  // 深红玫瑰
+      { light: '#fdeef2', c1: '#f3ced8', deep: '#dfa4b3' }   // 素白粉
+    ];
+    const PETAL_SHAPE_COUNT = 3;
+
+    const SPRITE_SIZE = 96;
+    const PETAL_SPRITES = []; // [colorIdx][shapeIdx] -> canvas
+
+    // 在离屏画布上绘制一种花瓣（窄基 → 宽弧 → 波浪瓣缘 + 瓣脉/高光）
+    function drawPetalShape(g, s, shapeIdx, color) {
+      const grad = g.createLinearGradient(0, s * 0.92, 0, -s * 0.85);
+      grad.addColorStop(0, color.deep);
+      grad.addColorStop(0.5, color.c1);
+      grad.addColorStop(1, color.light);
+      g.fillStyle = grad;
+
+      g.beginPath();
+      if (shapeIdx === 0) {
+        // —— 形 0：经典玫瑰瓣（宽顶、波浪缘、中央浅凹）——
+        g.moveTo(0, s * 0.92);
+        g.bezierCurveTo(s * 0.52, s * 0.52, s * 0.74, s * 0.02, s * 0.60, -s * 0.30);
+        g.quadraticCurveTo(s * 0.56, -s * 0.68, s * 0.28, -s * 0.70);
+        g.quadraticCurveTo(s * 0.12, -s * 0.64, 0, -s * 0.80);
+        g.quadraticCurveTo(-s * 0.12, -s * 0.64, -s * 0.28, -s * 0.70);
+        g.quadraticCurveTo(-s * 0.56, -s * 0.68, -s * 0.60, -s * 0.30);
+        g.bezierCurveTo(-s * 0.74, s * 0.02, -s * 0.52, s * 0.52, 0, s * 0.92);
+      } else if (shapeIdx === 1) {
+        // —— 形 1：圆润杯状瓣（更窄更圆、瓣缘柔和）——
+        g.moveTo(0, s * 0.95);
+        g.bezierCurveTo(s * 0.50, s * 0.60, s * 0.66, s * 0.05, s * 0.52, -s * 0.35);
+        g.quadraticCurveTo(s * 0.46, -s * 0.70, s * 0.20, -s * 0.62);
+        g.quadraticCurveTo(s * 0.08, -s * 0.56, 0, -s * 0.66);
+        g.quadraticCurveTo(-s * 0.08, -s * 0.56, -s * 0.20, -s * 0.62);
+        g.quadraticCurveTo(-s * 0.46, -s * 0.70, -s * 0.52, -s * 0.35);
+        g.bezierCurveTo(-s * 0.66, s * 0.05, -s * 0.50, s * 0.60, 0, s * 0.95);
+      } else {
+        // —— 形 2：宽瓣深凹（外层大瓣、心形凹口更明显）——
+        g.moveTo(0, s * 0.88);
+        g.bezierCurveTo(s * 0.58, s * 0.50, s * 0.80, s * 0.00, s * 0.66, -s * 0.28);
+        g.quadraticCurveTo(s * 0.62, -s * 0.62, s * 0.34, -s * 0.66);
+        g.quadraticCurveTo(s * 0.16, -s * 0.64, 0, -s * 0.88);
+        g.quadraticCurveTo(-s * 0.16, -s * 0.64, -s * 0.34, -s * 0.66);
+        g.quadraticCurveTo(-s * 0.62, -s * 0.62, -s * 0.66, -s * 0.28);
+        g.bezierCurveTo(-s * 0.80, s * 0.00, -s * 0.58, s * 0.50, 0, s * 0.88);
+      }
+      g.closePath();
+      g.fill();
+
+      // 瓣缘高光
+      g.strokeStyle = 'rgba(255,246,240,0.28)';
+      g.lineWidth = Math.max(0.6, s * 0.05);
+      g.stroke();
+
+      // 中央折痕瓣脉
+      g.strokeStyle = 'rgba(96,22,40,0.28)';
+      g.lineWidth = Math.max(0.5, s * 0.045);
+      g.beginPath();
+      g.moveTo(0, s * 0.70);
+      g.bezierCurveTo(s * 0.10, s * 0.22, -s * 0.10, -s * 0.18, 0, -s * 0.52);
+      g.stroke();
+
+      // 两侧细瓣脉
+      g.strokeStyle = 'rgba(96,22,40,0.14)';
+      g.beginPath();
+      g.moveTo(s * 0.14, s * 0.34);
+      g.quadraticCurveTo(s * 0.30, -s * 0.04, s * 0.26, -s * 0.40);
+      g.moveTo(-s * 0.14, s * 0.34);
+      g.quadraticCurveTo(-s * 0.30, -s * 0.04, -s * 0.26, -s * 0.40);
+      g.stroke();
+
+      // 顶部釉面高光
+      g.fillStyle = 'rgba(255,255,255,0.10)';
+      g.beginPath();
+      g.ellipse(0, -s * 0.30, s * 0.24, s * 0.12, -0.25, 0, Math.PI * 2);
+      g.fill();
+    }
+
+    function buildPetalSprites() {
+      for (let ci = 0; ci < PETAL_COLORS.length; ci++) {
+        PETAL_SPRITES[ci] = [];
+        for (let sh = 0; sh < PETAL_SHAPE_COUNT; sh++) {
+          const c = document.createElement('canvas');
+          c.width = SPRITE_SIZE; c.height = SPRITE_SIZE;
+          const g = c.getContext('2d');
+          g.translate(SPRITE_SIZE / 2, SPRITE_SIZE / 2);
+          drawPetalShape(g, SPRITE_SIZE * 0.5, sh, PETAL_COLORS[ci]);
+          PETAL_SPRITES[ci][sh] = c;
+        }
+      }
+    }
+
+    // 运行时绘制：仅做变换 + drawImage（开销极低）
+    function drawSinglePetal(ctx, x, y, size, angle, flip, tilt, alpha, colorIdx, shapeIdx) {
+      if (alpha <= 0.005) return;
+      const sprite = PETAL_SPRITES[colorIdx] && PETAL_SPRITES[colorIdx][shapeIdx];
+      if (!sprite) return;
+      const k = size / (SPRITE_SIZE * 0.5);
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(angle);
+      ctx.scale(Math.cos(tilt) * k, Math.sin(flip) * k);
+      ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
+      ctx.drawImage(sprite, -SPRITE_SIZE / 2, -SPRITE_SIZE / 2, SPRITE_SIZE, SPRITE_SIZE);
+      ctx.restore();
+    }
+
+    function lerpAngle(a, b, t) {
+      let d = (b - a) % (Math.PI * 2);
+      if (d > Math.PI) d -= Math.PI * 2;
+      if (d < -Math.PI) d += Math.PI * 2;
+      return a + d * t;
+    }
+
+    // ==========================================
+    // 第一页：高度场堆积物理
+    // ==========================================
+    const MAX_SHELF_PETALS = 100;
+    let interceptedCount = 0;
+    let shelfState = 'accumulating';
+    let restTimer = 0;
+    let windStyleIndex = 0;
+    let windBlastTimer = 0;
+
+    class InterceptablePetal {
+      constructor(isTargeted) {
+        this.isTargeted = isTargeted;
+        this.seed = Math.random() * 100;
+        this.state = 'falling';
+        this.dead = false;
+        this.reset(true);
+      }
+
+      reset(init) {
+        if (this.state === 'landed') {
+          const i = pileOrder.indexOf(this);
+          if (i >= 0) { pileOrder.splice(i, 1); interceptedCount = Math.max(0, interceptedCount - 1); }
+        }
+        this.state = 'falling';
+        this.isDrape = false;
+        this.gaveUp = false;
+        this.ejectT = 0;
+        this.rolls = 0;
+        this.bounces = 0;
+        this.expo = 0;
+        this.jolt = 0;
+        this.dislodgeDelay = 0;
+        this.landOffset = 0;
+        this.restRelX = 0;
+        this.restDY = 0;
+        this.homeX = null;
+
+        // 每次重生重新随机外观 → 24 种组合持续轮换
+        this.colorIdx = (Math.random() * PETAL_COLORS.length) | 0;
+        this.shapeIdx = (Math.random() * PETAL_SHAPE_COUNT) | 0;
+        // 形 2（宽瓣）略小、形 1（窄瓣）略大，视觉面积更均衡
+        this.size = (this.shapeIdx === 2 ? 11 : this.shapeIdx === 1 ? 13 : 12) + Math.random() * 7;
+
+        if (this.isTargeted && btnRect.width > 0) {
+          const half = (btnRect.width - 30) * 0.5;
+          const tri = (Math.random() + Math.random() - 1);
+          this.homeX = btnRect.cx + tri * half;
+          this.x = this.homeX + (Math.random() - 0.5) * 26;
+          this.y = init ? -Math.random() * H * 0.6 : -30 - Math.random() * 90;
+          this.drift = (Math.random() - 0.5) * 0.1;
+          this.termV = 1.5 + Math.random() * 0.9;
+        } else {
+          this.x = Math.random() * W;
+          this.y = init ? Math.random() * H : -40 - Math.random() * 120;
+          this.drift = (Math.random() - 0.5) * 0.5;
+          this.termV = 1.3 + Math.random() * 1.0;
+        }
+
+        this.swayPhase = Math.random() * Math.PI * 2;
+        this.swayRate = 0.05 + Math.random() * 0.05;
+        this.angle = Math.random() * Math.PI * 2;
+        this.vAngle = (Math.random() - 0.5) * 0.05;
+        this.flip = Math.random() * Math.PI;
+        this.vFlip = 0.02 + Math.random() * 0.03;
+        this.tilt = Math.random() * Math.PI;
+        this.vTilt = 0.015 + Math.random() * 0.028;
+        this.alpha = 0.72 + Math.random() * 0.28;
+        this.vx = 0;
+        this.vy = this.termV * 0.5;
+      }
+
+      update() {
+        switch (this.state) {
+          case 'falling':  this.updateFalling();  break;
+          case 'contact':  this.updateContact();  break;
+          case 'sliding':  this.updateSliding();  break;
+          case 'settling': this.updateSettling(); break;
+          case 'landed':   this.updateLanded();   break;
+          case 'blowing':  this.updateBlowing();  break;
+        }
+      }
+
+      updateFalling() {
+        if (this.ejectT > 0) this.ejectT--;
+
+        this.tilt += this.vTilt;
+        const face = 0.3 + 0.7 * Math.abs(Math.cos(this.tilt));
+        this.swayPhase += this.swayRate;
+        const swayAmp = (this.homeX != null) ? 0.26 : 0.5;
+        const targetVx = Math.sin(this.swayPhase) * swayAmp * (0.5 + 0.5 * face) + this.drift;
+        const targetVy = this.termV * (1.28 - 0.6 * face);
+        this.vx += (targetVx - this.vx) * 0.1;
+        this.vy += (targetVy - this.vy) * 0.06;
+
+        if (this.homeX != null) {
+          this.vx += (this.homeX - this.x) * 0.0016;
+          this.vx *= 0.995;
+        }
+
+        this.x += this.vx;
+        this.y += this.vy;
+        this.angle += this.vAngle * (1.5 - face);
+        this.flip += this.vFlip * (0.4 + 0.6 * face);
+
+        const directed = (this.homeX != null && !this.gaveUp);
+
+        if (directed && this.ejectT <= 0 && btnRect.width > 0 && pileTop > 0) {
+          const h = pileHeightAt(this.x);
+          if (h >= 0) {
+            const gy = pileTop - h;
+            if (this.y + this.size * 0.38 >= gy && this.y < pileTop + 10) {
+              if (shelfState === 'accumulating' && interceptedCount < MAX_SHELF_PETALS) {
+                this.handleContact(gy);
+                return;
+              } else {
+                const relX = (this.x - btnRect.cx) / (btnRect.width * 0.5);
+                this.vx += (relX >= 0 ? 1 : -1) * (0.7 + Math.random() * 0.6);
+                this.vy *= 0.4;
+                this.y = gy - this.size * 0.42;
+                this.ejectT = 22;
+                if (++this.rolls > 2) { this.gaveUp = true; this.homeX = null; }
+              }
+            }
+          }
+        }
+
+        // 兜底保险：绝不允许定向花瓣穿过按钮矩形
+        if (directed && this.ejectT <= 0 && pileTop > 0 && btnRect.width > 0 &&
+            this.x > btnRect.left - 8 && this.x < btnRect.right + 8 &&
+            this.y > pileTop - 2 && this.y < btnRect.bottom + 26) {
+          const cx = Math.min(Math.max(this.x, pileLeft + 2), pileRight - 2);
+          this.x = cx;
+          if (this.y > pileTop + 4) this.y = pileTop - 2;
+          this.handleContact(pileTop - Math.max(0, pileHeightAt(cx)));
+          return;
+        }
+
+        if (this.y > H + 40) this.reset();
+      }
+
+      handleContact(gy) {
+        const slope = pileSlopeAt(this.x);
+        const relX = (this.x - btnRect.cx) / (btnRect.width * 0.5);
+
+        if (Math.abs(slope) > 0.5 && Math.random() < 0.85) {
+          this.state = 'sliding';
+          this.vx = -Math.sign(slope) * (0.55 + Math.random() * 0.5);
+          this.vy = Math.max(this.vy * 0.3, 0.15);
+          this.vAngle = -Math.sign(slope) * (0.015 + Math.random() * 0.02);
+          this.y = gy - this.size * 0.32;
+          return;
+        }
+
+        if (Math.abs(relX) > 0.88 && Math.random() < 0.5) {
+          this.slideOffEdge(relX > 0 ? 1 : -1);
+          return;
+        }
+
+        if (this.vy > 2.4 && Math.random() < 0.55) {
+          this.state = 'contact';
+          this.bounces = 1;
+          this.vy = -(0.45 + Math.random() * 0.4);
+          this.vx += (Math.random() - 0.5) * 0.5;
+          this.y = gy - this.size * 0.38;
+          return;
+        }
+
+        this.beginSettle(gy, slope);
+      }
+
+      updateContact() {
+        this.vy += 0.16;
+        this.vx *= 0.9;
+        this.x += this.vx;
+        this.y += this.vy;
+        this.angle += this.vAngle * 0.4;
+        const h = pileHeightAt(this.x);
+        if (h < 0) { this.state = 'falling'; return; }
+        const gy = pileTop - h;
+        if (this.y + this.size * 0.36 >= gy) {
+          if (Math.abs(this.vy) < 0.65 || this.bounces >= 2) {
+            this.beginSettle(gy, pileSlopeAt(this.x));
+          } else {
+            this.vy = -this.vy * 0.32;
+            this.bounces++;
+            this.vx += (Math.random() - 0.5) * 0.4;
+            this.y = gy - this.size * 0.36;
+          }
+        }
+      }
+
+      updateSliding() {
+        const h = pileHeightAt(this.x);
+        if (h < 0) { this.slideOffEdge(this.x < pileLeft ? -1 : 1); return; }
+        const slope = pileSlopeAt(this.x);
+        this.vx += -slope * 0.35;
+        this.vx *= 0.96;
+        this.x += this.vx;
+        const gy = pileTop - pileHeightAt(this.x);
+        this.y += (gy - this.size * 0.3 - this.y) * 0.35;
+        this.angle = lerpAngle(this.angle, Math.atan(slope) * 0.9, 0.15);
+        const flat = Math.round(this.tilt / Math.PI) * Math.PI;
+        this.tilt += (flat - this.tilt) * 0.2;
+        if (Math.abs(slope) < 0.38 || Math.abs(this.vx) < 0.1) {
+          this.beginSettle(gy, slope);
+        }
+      }
+
+      beginSettle(gy, slope) {
+        this.state = 'settling';
+        this.isDrape = false;
+        this.settleT = 0;
+        this.fromY = this.y;
+        this.toY = gy - this.size * (0.15 + Math.random() * 0.11);
+        const quarters = [0, Math.PI / 2, Math.PI, -Math.PI / 2];
+        this.fromAngle = this.angle;
+        this.toAngle = Math.atan(slope) * 0.8 + quarters[(Math.random() * 4) | 0] + (Math.random() - 0.5) * 0.45;
+        this.fromTilt = this.tilt;
+        this.toTilt = Math.round(this.tilt / Math.PI) * Math.PI + (Math.random() - 0.5) * 0.28;
+        this.fromFlip = this.flip;
+        this.toFlip = Math.round((this.flip - Math.PI / 2) / Math.PI) * Math.PI + Math.PI / 2 + (Math.random() - 0.5) * 0.34;
+        this.vx *= 0.25;
+        this.vy = 0;
+      }
+
+      slideOffEdge(dir) {
+        let drapeCount = 0;
+        for (let i = 0; i < p1Petals.length; i++) {
+          if (p1Petals[i].state === 'landed' && p1Petals[i].isDrape) drapeCount++;
+        }
+        if (Math.random() < 0.45 && drapeCount < 5) {
+          this.state = 'settling';
+          this.isDrape = true;
+          this.settleT = 0;
+          const edgeX = dir > 0 ? pileRight : pileLeft;
+          this.restRelX = edgeX - dir * (2 + Math.random() * 4) - btnRect.left;
+          this.x = btnRect.left + this.restRelX;
+          this.fromY = this.y;
+          this.toY = pileTop + this.size * (0.2 + Math.random() * 0.16);
+          this.fromAngle = this.angle;
+          this.toAngle = dir * (1.6 + Math.random() * 0.5);
+          this.fromTilt = this.tilt;
+          this.toTilt = Math.round(this.tilt / Math.PI) * Math.PI + (Math.random() - 0.5) * 0.2;
+          this.fromFlip = this.flip;
+          this.toFlip = Math.round((this.flip - Math.PI / 2) / Math.PI) * Math.PI + Math.PI / 2 + (Math.random() - 0.5) * 0.3;
+          this.vx = 0; this.vy = 0;
+        } else {
+          this.state = 'falling';
+          this.gaveUp = true;
+          this.homeX = null;
+          this.vx = dir * (0.7 + Math.random() * 0.8);
+          this.vy = 0.2;
+        }
+      }
+
+      updateSettling() {
+        this.settleT += 0.13;
+        const t = Math.min(1, this.settleT);
+        const e = 1 - (1 - t) * (1 - t);
+        if (this.isDrape) this.x = btnRect.left + this.restRelX;
+        this.y = this.fromY + (this.toY - this.fromY) * e;
+        this.angle = lerpAngle(this.fromAngle, this.toAngle, e);
+        this.tilt = this.fromTilt + (this.toTilt - this.fromTilt) * e;
+        this.flip = this.fromFlip + (this.toFlip - this.fromFlip) * e;
+        if (t >= 1) this.finishSettle();
+      }
+
+      finishSettle() {
+        this.state = 'landed';
+        this.bounces = 0;
+        this.jolt = 0;
+        this.restRelX = this.x - btnRect.left;
+        this.restDY = this.y - btnRect.top;
+        this.expo = this.isDrape ? 1 : Math.min(1, Math.max(0, -this.restDY) / 16);
+
+        if (!this.isDrape) {
+          depositAt(this.x, this.size * (0.17 + Math.random() * 0.12));
+        } else {
+          depositAt(btnRect.left + this.restRelX, this.size * 0.07);
+        }
+
+        interceptedCount++;
+        this.landOffset = interceptedCount;
+        pileOrder.push(this);
+
+        for (let i = 0; i < pileOrder.length; i++) {
+          const q = pileOrder[i];
+          if (q !== this && Math.abs(q.x - this.x) < 15 && q.restDY > this.restDY) {
+            q.jolt = Math.min(1, (q.jolt || 0) + 0.45);
+          }
+        }
+
+        if (interceptedCount >= MAX_SHELF_PETALS && shelfState === 'accumulating') {
+          shelfState = 'resting';
+          restTimer = Date.now();
+        }
+      }
+
+      updateLanded() {
+        this.x = btnRect.left + this.restRelX;
+        this.y = btnRect.top + this.restDY;
+
+        if (shelfState === 'blowing') {
+          if (Date.now() - windBlastTimer >= this.dislodgeDelay) { this.dislodge(); return; }
+        }
+
+        const t = Date.now() * 0.0022 + this.landOffset * 1.7;
+        const amp = 0.12 + this.expo * 0.3;
+        this.x += Math.sin(t) * amp * 0.8;
+        this.y += Math.cos(t * 1.31) * amp * 0.55;
+
+        if (this.jolt > 0.02) {
+          this.y += Math.sin(Date.now() * 0.045 + this.landOffset * 2.3) * this.jolt;
+          this.jolt *= 0.88;
+        }
+      }
+
+      dislodge() {
+        const i = pileOrder.indexOf(this);
+        if (i >= 0) pileOrder.splice(i, 1);
+        this.state = 'blowing';
+        this.isDrape = false;
+        const dir = (windStyleIndex === 2) ? -1 : 1;
+        this.vx = dir * (0.8 + Math.random() * 1.7) + (Math.random() - 0.5) * 0.6;
+        this.vy = -(1.0 + Math.random() * 1.6);
+        this.vAngle = (Math.random() - 0.5) * 0.28;
+        this.vTilt = 0.05 + Math.random() * 0.05;
+        this.alpha = 0.95;
+      }
+
+      updateBlowing() {
+        switch (windStyleIndex) {
+          case 0: this.vx += 0.28; break;
+          case 1: this.vx += Math.cos(this.y * 0.02 + this.seed) * 0.42; break;
+          case 2: this.vx -= 0.28; break;
+          case 3: this.vx += (this.x >= btnRect.cx ? 1 : -1) * 0.16; break;
+          case 4: this.vx += 0.24; this.x += Math.sin(this.y * 0.05) * 1.7; break;
+        }
+        this.vx *= 0.99;
+        this.vy = this.vy * 0.985 + 0.05 + Math.sin(Date.now() * 0.008 + this.seed) * 0.05;
+        this.x += this.vx;
+        this.y += this.vy;
+        this.angle += this.vAngle;
+        this.tilt += this.vTilt;
+        this.flip += 0.05;
+        this.alpha -= 0.006;
+        if (this.y > H + 50 || this.y < -80 || this.x > W + 90 || this.x < -90 || this.alpha <= 0) {
+          this.reset();
+        }
+      }
+
+      draw(ctx) {
+        let s = this.size;
+        if (this.state === 'settling') {
+          s = this.size * (1 - 0.09 * Math.sin(Math.PI * Math.min(1, this.settleT)));
+        }
+        drawSinglePetal(ctx, this.x, this.y, s, this.angle, this.flip, this.tilt, this.alpha, this.colorIdx, this.shapeIdx);
+      }
+    }
+
+    function updateShelfLifecycle() {
+      if (shelfState === 'resting') {
+        if (Date.now() - restTimer > 2200) {
+          shelfState = 'blowing';
+          windBlastTimer = Date.now();
+          let maxH = 0;
+          for (let i = 0; i < PILE_BINS; i++) if (pileHeights[i] > maxH) maxH = pileHeights[i];
+          p1Petals.forEach(function(p) {
+            if (p.state === 'landed') {
+              const expo = p.isDrape ? 1 : (maxH > 3 ? Math.min(1, Math.max(0, -p.restDY) / maxH) : 0.5);
+              p.dislodgeDelay = (1 - expo) * 750 + Math.random() * 450;
+            }
+          });
+        }
+      } else if (shelfState === 'blowing') {
+        for (let i = 0; i < PILE_BINS; i++) pileHeights[i] *= 0.985;
+        if (Date.now() - windBlastTimer > 3000) {
+          p1Petals.forEach(function(p) { if (p.state === 'landed') p.dislodge(); });
+          pileOrder.length = 0;
+          pileHeights.fill(0);
+          interceptedCount = 0;
+          shelfState = 'accumulating';
+          windStyleIndex = (windStyleIndex + 1) % 5;
+        }
+      }
+    }
+
+    function softResetPile() {
+      pileHeights.fill(0);
+      pileOrder.length = 0;
+      interceptedCount = 0;
+      shelfState = 'accumulating';
+      p1Petals.forEach(function(p) {
+        if (p.state === 'landed' || p.state === 'settling' || p.state === 'sliding' || p.state === 'contact') {
+          p.state = 'falling';
+          p.isDrape = false;
+          p.y -= 8;
+          p.vy = -(0.6 + Math.random() * 0.9);
+          p.vx = (Math.random() - 0.5) * 1.6;
+        }
+      });
+    }
+
+    function drawPileMass() {
+      let any = false;
+      for (let i = 0; i < PILE_BINS; i++) if (pileHeights[i] > 0.6) { any = true; break; }
+      if (!any) return;
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(pileLeft, pileTop + 4);
+      for (let i = 0; i < PILE_BINS; i++) {
+        ctx.lineTo(pileLeft + (i + 0.5) * pileBinW, pileTop - pileHeights[i]);
+      }
+      ctx.lineTo(pileRight, pileTop + 4);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(58, 16, 26, 0.10)';
+      ctx.fill();
+
+      const grad = ctx.createLinearGradient(0, pileTop, 0, pileTop + 6);
+      grad.addColorStop(0, 'rgba(40, 10, 18, 0.20)');
+      grad.addColorStop(1, 'rgba(40, 10, 18, 0)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(pileLeft - 2, pileTop, (pileRight - pileLeft) + 4, 6);
+      ctx.restore();
+    }
+
+    function drawPileContactShadows() {
+      if (pileOrder.length === 0) return;
+      ctx.save();
+      ctx.fillStyle = 'rgb(45, 12, 22)';
+      for (let i = 0; i < pileOrder.length; i++) {
+        const p = pileOrder[i];
+        if (p.isDrape) continue;
+        ctx.globalAlpha = 0.07 * Math.min(1, p.alpha + 0.2);
+        ctx.beginPath();
+        ctx.ellipse(p.x, p.y + p.size * 0.42, p.size * 0.40, 2.1, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+
+    // ==========================================
+    // 转场：大风卷走全部花瓣
+    // ==========================================
+    let windoutStart = 0;
+
+    function startWindOut() {
+      currentState = 'windout';
+      windoutStart = Date.now();
+      pileOrder.length = 0;
+      pileHeights.fill(0);
+      p1Petals.forEach(function(p) {
+        p.state = 'windout';
+        p.isDrape = false;
+        p.vx = 1.6 + Math.random() * 2.6;
+        p.vy = -(1.2 + Math.random() * 2.2);
+        p.vAngle = 0.2 + Math.random() * 0.15;
+        p.vTilt = 0.06 + Math.random() * 0.05;
+        if (p.alpha < 0.6) p.alpha = 0.85;
+      });
+      page2Overlay.classList.add('active');
+      setTimeout(function() { cardElem.classList.add('blown'); }, 450);
+    }
+
+    function updateWindOut(now) {
+      for (let i = 0; i < p1Petals.length; i++) {
+        const p = p1Petals[i];
+        if (p.dead) continue;
+        p.vx += 0.55 + Math.random() * 0.25;
+        p.vy -= 0.34 + Math.random() * 0.18;
+        p.vy += Math.sin(now * 0.01 + p.seed) * 0.12;
+        p.vx *= 0.995; p.vy *= 0.995;
+        p.x += p.vx; p.y += p.vy;
+        p.angle += p.vAngle; p.flip += 0.11; p.tilt += 0.09;
+        p.alpha -= 0.010;
+        if (p.x > W + 90 || p.y < -90 || p.alpha <= 0) { p.dead = true; continue; }
+        p.draw(ctx);
+      }
+      if (now - windoutStart > 1800) enterScrollScene();
+    }
+
+    // ==========================================
+    // 第二页：红宣纸卷轴 + 墨迹晕染书写 + 烟花
+    // ==========================================
+    const SCROLL_TEXT = "Thank you for accepting our invitation. Please feel free to reach out directly if you have any requests.";
+
+    const OPEN_MS  = 1400;
+    const PREWRITE_MS = 420;
+    const PAUSE_MS = 3000;
+    const CLOSE_MS = 1300;
+    const FADE_MS  = 800;
+
+    let scrollPhase = 'idle';
+    let phaseElapsed = 0;
+    let scrollRawT = 0;
+    let writeElapsed = 0;
+    let curCharIdx = 0;
+    let scrollLayout = null;
+    let paperPattern = null;
+
+    function setScrollPhase(p) { scrollPhase = p; phaseElapsed = 0; }
+
+    function enterScrollScene() {
+      currentState = 'scroll';
+      page1.classList.add('hidden');
+      scrollRawT = 0; writeElapsed = 0; curCharIdx = 0;
+      setScrollPhase('opening');
+      if (!paperPattern) buildPaperTexture();
+      fontsReady.then(function() {
+        if (currentState === 'scroll' && !scrollLayout) buildScrollLayout();
+      });
+    }
+
+    // 红宣纸纹理（离屏生成一次）
+    function buildPaperTexture() {
+      const t = document.createElement('canvas');
+      t.width = 512; t.height = 512;
+      const g = t.getContext('2d');
+      g.fillStyle = '#a41f29';
+      g.fillRect(0, 0, 512, 512);
+      for (let i = 0; i < 150; i++) {
+        const x = Math.random() * 512, y1 = Math.random() * 512;
+        const len = 30 + Math.random() * 190;
+        g.strokeStyle = Math.random() < 0.5 ? 'rgba(255,214,196,0.045)' : 'rgba(66,0,12,0.055)';
+        g.lineWidth = 0.7 + Math.random() * 1.1;
+        g.beginPath();
+        g.moveTo(x, y1);
+        g.lineTo(x + (Math.random() - 0.5) * 3, y1 + len);
+        g.stroke();
+      }
+      for (let i = 0; i < 900; i++) {
+        g.fillStyle = Math.random() < 0.5 ? 'rgba(255,230,215,0.05)' : 'rgba(58,0,10,0.06)';
+        g.fillRect(Math.random() * 512, Math.random() * 512, 1.3, 1.3);
+      }
+      paperPattern = ctx.createPattern(t, 'repeat');
+    }
+
+    // 文本排版 + 书写节奏 + 晕染参数
+    function buildScrollLayout() {
+      const paperW = Math.min(W * 0.92, 1020);
+      const paperH = Math.max(230, Math.min(H * 0.46, 370));
+      const cx = W / 2, cy = H / 2;
+      const padX = Math.max(30, paperW * 0.07);
+      const maxTextW = paperW - padX * 2;
+      const maxTextH = paperH - 84;
+
+      let fs = paperW < 560 ? 26 : 32;
+      const layout = function(size) {
+        ctx.font = '700 ' + size + "px 'Dancing Script', cursive";
+        const words = SCROLL_TEXT.split(' ');
+        const lines = [];
+        let cur = '', curW = 0;
+        const spaceW = ctx.measureText(' ').width;
+        for (let i = 0; i < words.length; i++) {
+          const w = words[i];
+          const ww = ctx.measureText(w).width;
+          if (cur && curW + spaceW + ww > maxTextW) {
+            lines.push(cur); cur = w; curW = ww;
+          } else if (cur) {
+            cur += ' ' + w; curW += spaceW + ww;
+          } else {
+            cur = w; curW = ww;
+          }
+        }
+        if (cur) lines.push(cur);
+        return lines;
+      };
+
+      let lines = layout(fs);
+      let lineH = fs * 1.52;
+      for (let k = 0; k < 2; k++) {
+        if (lines.length * lineH > maxTextH) {
+          fs = Math.max(15, fs * (maxTextH / (lines.length * lineH)) * 0.96);
+          lines = layout(fs);
+          lineH = fs * 1.52;
+        }
+      }
+      ctx.font = '700 ' + fs + "px 'Dancing Script', cursive";
+
+      const lineObjs = [];
+      let totalChars = 0;
+      for (let li = 0; li < lines.length; li++) {
+        const ln = lines[li];
+        const lw = ctx.measureText(ln).width;
+        let x = cx - lw / 2;
+        const chars = [];
+        for (let ci = 0; ci < ln.length; ci++) {
+          const cw = ctx.measureText(ln[ci]).width;
+          chars.push({ ch: ln[ci], x: x, w: cw });
+          x += cw; totalChars++;
+        }
+        lineObjs.push({ chars: chars, width: lw });
+      }
+      const totalH = lines.length * lineH;
+      const startY = cy - totalH / 2 + lineH * 0.62;
+      for (let i = 0; i < lineObjs.length; i++) lineObjs[i].y = startY + i * lineH;
+
+      // 书写节奏：普通 82ms、空格 36ms、句号 560ms、起笔酝酿 260ms
+      const charEnd = [];
+      let t = 260;
+      for (let li = 0; li < lineObjs.length; li++) {
+        const cs = lineObjs[li].chars;
+        for (let ci = 0; ci < cs.length; ci++) {
+          const ch = cs[ci].ch;
+          t += (ch === ' ') ? 36 : (ch === '.') ? 560 : 82;
+          charEnd.push(t);
+        }
+      }
+
+      // 手写质感 + 晕染参数（每字独立）
+      const charRot = [], charInk = [], charDy = [];
+      const charBleed = [], wickLen = [], wickX = [], wickSlant = [];
+      for (let i = 0; i < totalChars; i++) {
+        charRot.push((Math.random() - 0.5) * 0.05);
+        charInk.push(0.86 + Math.random() * 0.14);
+        charDy.push((Math.random() - 0.5) * 2);
+        charBleed.push(520 + Math.random() * 420);
+        wickLen.push(Math.random() < 0.34 ? 0 : 2.5 + Math.random() * 4.5);
+        wickX.push((Math.random() - 0.5) * 10);
+        wickSlant.push((Math.random() - 0.5) * 1.6);
+      }
+
+      scrollLayout = {
+        paperW: paperW, paperH: paperH, cx: cx, cy: cy,
+        fs: fs, lineH: lineH, lineObjs: lineObjs,
+        totalChars: totalChars, charEnd: charEnd, totalMs: t,
+        charRot: charRot, charInk: charInk, charDy: charDy,
+        charBleed: charBleed, wickLen: wickLen, wickX: wickX, wickSlant: wickSlant
+      };
+    }
+
+    function easeInOutQuad(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
+    function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+    // 逐字书写 + 墨迹晕染（在纸张 clip 内调用）
+    function drawWrittenText() {
+      const L = scrollLayout;
+      const elapsed = (scrollPhase === 'writing') ? writeElapsed
+                    : L.totalMs + (scrollPhase === 'pausing' ? phaseElapsed : 60000);
+
+      let idx = L.totalChars, p = 1;
+      for (let i = 0; i < L.totalChars; i++) {
+        if (elapsed < L.charEnd[i]) {
+          idx = i;
+          p = (elapsed - (i ? L.charEnd[i - 1] : 0)) / (L.charEnd[i] - (i ? L.charEnd[i - 1] : 0));
+          break;
+        }
+      }
+      curCharIdx = Math.min(idx, L.totalChars);
+
+      ctx.font = '700 ' + L.fs + "px 'Dancing Script', cursive";
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'alphabetic';
+
+      let gi = 0;
+      for (let li = 0; li < L.lineObjs.length; li++) {
+        const lo = L.lineObjs[li];
+        for (let ci = 0; ci < lo.chars.length; ci++) {
+          const c = lo.chars[ci];
+          const cx = c.x + c.w / 2;
+          const cy = lo.y + L.charDy[gi];
+
+          if (gi < idx) {
+            // —— 已写完：墨迹在生宣上晕开 ——
+            const b = Math.min(1, Math.max(0, (elapsed - L.charEnd[gi]) / L.charBleed[gi]));
+
+            if (b > 0.02) {
+              ctx.save();
+              ctx.translate(cx, cy);
+              ctx.rotate(L.charRot[gi]);
+              const sc = 1 + 0.05 * b;
+              ctx.scale(sc, sc);
+              ctx.shadowColor = 'rgba(84,12,24,' + (0.36 * b).toFixed(3) + ')';
+              ctx.shadowBlur = L.fs * (0.08 + 0.26 * b);
+              ctx.fillStyle = 'rgba(84,12,24,' + (0.30 * b).toFixed(3) + ')';
+              ctx.fillText(c.ch, 0, 0);
+              ctx.restore();
+            }
+
+            // 墨芯（随"干燥"微褪）
+            ctx.save();
+            ctx.translate(cx, cy);
+            ctx.rotate(L.charRot[gi]);
+            ctx.fillStyle = 'rgba(40,14,24,' + (L.charInk[gi] * (1 - 0.10 * b)).toFixed(3) + ')';
+            ctx.fillText(c.ch, 0, 0);
+            ctx.restore();
+
+            // 顺纤维垂坠的细墨痕
+            if (b > 0.15 && L.wickLen[gi] > 0) {
+              ctx.strokeStyle = 'rgba(84,12,24,' + (0.12 * b).toFixed(3) + ')';
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              const wx = cx + L.wickX[gi];
+              ctx.moveTo(wx, cy - L.fs * 0.08);
+              ctx.lineTo(wx + L.wickSlant[gi], cy - L.fs * 0.08 + L.wickLen[gi] * b);
+              ctx.stroke();
+            }
+          } else if (gi === idx && c.ch !== ' ') {
+            // —— 正在落笔：墨滴收缩定形 ——
+            const e = easeOutCubic(Math.max(0, Math.min(1, p)));
+            ctx.save();
+            ctx.translate(cx, cy - (1 - e) * 3);
+            ctx.rotate(L.charRot[gi]);
+            const sc = 1.28 - 0.28 * e;
+            ctx.scale(sc, sc);
+            ctx.fillStyle = 'rgba(40,14,24,' + ((0.35 + 0.65 * e) * L.charInk[gi]).toFixed(3) + ')';
+            ctx.fillText(c.ch, 0, 0);
+            ctx.restore();
+          }
+          gi++;
+        }
+      }
+    }
+
+    // 木轴（圆柱高光 + 金色轴头）
+    function drawRod(x, w, top, h) {
+      ctx.save();
+      const g = ctx.createLinearGradient(x, 0, x + w, 0);
+      g.addColorStop(0, '#2a180c');
+      g.addColorStop(0.35, '#7c5a36');
+      g.addColorStop(0.5, '#966a40');
+      g.addColorStop(0.68, '#6b4a2b');
+      g.addColorStop(1, '#241307');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(x, top, w, h, 8);
+      else ctx.rect(x, top, w, h);
+      ctx.fill();
+      ctx.restore();
+
+      const capYs = [top - 3, top + h + 3];
+      for (let i = 0; i < 2; i++) {
+        const cy2 = capYs[i];
+        const cg = ctx.createRadialGradient(x + w / 2 - 3, cy2 - 3, 1, x + w / 2, cy2, 12);
+        cg.addColorStop(0, '#e8c47c');
+        cg.addColorStop(0.55, '#b89052');
+        cg.addColorStop(1, '#6e4e22');
+        ctx.fillStyle = cg;
+        ctx.beginPath();
+        ctx.arc(x + w / 2, cy2, 11, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = 'rgba(255,240,205,0.7)';
+        ctx.beginPath();
+        ctx.arc(x + w / 2 - 3, cy2 - 3.5, 2.2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    // 卷轴整体渲染
+    function renderScroll(alpha, now) {
+      const L = scrollLayout;
+      if (!L) return;
+      const openW = L.paperW * easeInOutQuad(scrollRawT);
+      const halfPaper = openW / 2;
+      const rodW = 24;
+      const rodH = L.paperH + 26;
+      const rodTop = L.cy - rodH / 2;
+      const paperTop = L.cy - L.paperH / 2;
+      const paperLeft = L.cx - halfPaper;
+      const paperRight = L.cx + halfPaper;
+
+      ctx.save();
+      ctx.globalAlpha = alpha;
+
+      const shY = L.cy + L.paperH / 2 + 16;
+      const shR = openW * 0.55 + rodW;
+      const sg = ctx.createRadialGradient(L.cx, shY, 0, L.cx, shY, shR);
+      sg.addColorStop(0, 'rgba(0,0,0,0.5)');
+      sg.addColorStop(0.7, 'rgba(0,0,0,0.22)');
+      sg.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = sg;
+      ctx.save();
+      ctx.translate(L.cx, shY);
+      ctx.scale(1, 0.12);
+      ctx.beginPath();
+      ctx.arc(0, 0, shR, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(paperLeft, paperTop, openW, L.paperH);
+      ctx.clip();
+      ctx.fillStyle = paperPattern || '#a41f29';
+      ctx.fillRect(paperLeft, paperTop, openW, L.paperH);
+
+      let g = ctx.createLinearGradient(0, paperTop, 0, paperTop + 18);
+      g.addColorStop(0, 'rgba(38,0,8,0.42)');
+      g.addColorStop(1, 'rgba(38,0,8,0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(paperLeft, paperTop, openW, 18);
+      g = ctx.createLinearGradient(0, paperTop + L.paperH - 18, 0, paperTop + L.paperH);
+      g.addColorStop(0, 'rgba(38,0,8,0)');
+      g.addColorStop(1, 'rgba(38,0,8,0.42)');
+      ctx.fillStyle = g;
+      ctx.fillRect(paperLeft, paperTop + L.paperH - 18, openW, 18);
+
+      g = ctx.createLinearGradient(paperLeft, 0, paperLeft + 24, 0);
+      g.addColorStop(0, 'rgba(30,0,6,0.55)');
+      g.addColorStop(1, 'rgba(30,0,6,0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(paperLeft, paperTop, 24, L.paperH);
+      g = ctx.createLinearGradient(paperRight - 24, 0, paperRight, 0);
+      g.addColorStop(0, 'rgba(30,0,6,0)');
+      g.addColorStop(1, 'rgba(30,0,6,0.55)');
+      ctx.fillStyle = g;
+      ctx.fillRect(paperRight - 24, paperTop, 24, L.paperH);
+
+      ctx.fillStyle = 'rgba(92,8,16,0.9)';
+      ctx.fillRect(paperLeft, paperTop, openW, 2.5);
+      ctx.fillRect(paperLeft, paperTop + L.paperH - 2.5, openW, 2.5);
+
+      if (scrollPhase === 'writing' || scrollPhase === 'pausing' || scrollPhase === 'closing') {
+        drawWrittenText();
+      }
+      ctx.restore();
+
+      drawRod(paperLeft - rodW, rodW, rodTop, rodH);
+      drawRod(paperRight, rodW, rodTop, rodH);
+
+      ctx.restore();
+    }
+
+    // —— 烟花系统 ——
+    const fireworks = [];
+    const FW_COLORS = ['#ffd166', '#ffe9b8', '#fb6f92', '#ffc8dd', '#ff9e6d', '#f3c4fb', '#ffffff'];
+
+    class FireworkParticle {
+      constructor(x, y, color) {
+        this.x = x; this.y = y; this.color = color;
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 2 + Math.random() * 6;
+        this.vx = Math.cos(angle) * speed;
+        this.vy = Math.sin(angle) * speed;
+        this.alpha = 1;
+        this.decay = 0.015 + Math.random() * 0.02;
+        this.gravity = 0.08;
+        this.size = 2 + Math.random() * 2;
+      }
+      update() {
+        this.vx *= 0.96; this.vy *= 0.96;
+        this.vy += this.gravity;
+        this.x += this.vx; this.y += this.vy;
+        this.alpha -= this.decay;
+      }
+      draw(ctx) {
+        if (this.alpha <= 0) return;
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.fillStyle = this.color;
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    function createFirework(x, y) {
+      playPop();
+      const color = FW_COLORS[Math.floor(Math.random() * FW_COLORS.length)];
+      const count = 35 + Math.floor(Math.random() * 30);
+      for (let i = 0; i < count; i++) fireworks.push(new FireworkParticle(x, y, color));
+    }
+
+    function drawFireworksParticles() {
+      for (let i = fireworks.length - 1; i >= 0; i--) {
+        const p = fireworks[i];
+        p.update();
+        if (p.alpha <= 0) fireworks.splice(i, 1);
+        else p.draw(ctx);
+      }
+    }
+
+    function salvo(n) {
+      for (let i = 0; i < n; i++) {
+        createFirework(W * (0.12 + Math.random() * 0.76), H * (0.08 + Math.random() * 0.42));
+      }
+    }
+
+    let lastAutoFwTime = 0;
+    function autoFirework(now) {
+      if (now - lastAutoFwTime > 320 + Math.random() * 340) {
+        lastAutoFwTime = now;
+        createFirework(W * (0.08 + Math.random() * 0.84), H * (0.08 + Math.random() * 0.5));
+      }
+    }
+
+    // —— 卷轴场景状态机 ——
+    function updateScrollScene(dt, now) {
+      phaseElapsed += dt;
+
+      switch (scrollPhase) {
+        case 'opening':
+          scrollRawT = Math.min(1, phaseElapsed / OPEN_MS);
+          renderScroll(1, now);
+          if (scrollRawT >= 1) { setScrollPhase('prewrite'); playChime(392, 0.9); }
+          break;
+
+        case 'prewrite':
+          renderScroll(1, now);
+          if (phaseElapsed >= PREWRITE_MS) {
+            if (!scrollLayout) buildScrollLayout();
+            writeElapsed = 0; curCharIdx = 0;
+            setScrollPhase('writing');
+            playChime(523, 0.7);
+          }
+          break;
+
+        case 'writing':
+          writeElapsed += dt;
+          renderScroll(1, now);
+          if (writeElapsed >= scrollLayout.totalMs) setScrollPhase('pausing');
+          break;
+
+        case 'pausing':
+          renderScroll(1, now);
+          if (phaseElapsed >= PAUSE_MS) { setScrollPhase('closing'); playChime(262, 0.9); }
+          break;
+
+        case 'closing':
+          scrollRawT = Math.max(0, 1 - phaseElapsed / CLOSE_MS);
+          renderScroll(1, now);
+          if (scrollRawT <= 0) { setScrollPhase('fading'); salvo(3); }
+          break;
+
+        case 'fading': {
+          const a = Math.max(0, 1 - phaseElapsed / FADE_MS);
+          renderScroll(a, now);
+          autoFirework(now);
+          drawFireworksParticles();
+          if (a <= 0) {
+            setScrollPhase('fireworks');
+            controls.classList.add('visible');
+            salvo(4);
+          }
+          break;
+        }
+
+        case 'fireworks':
+          autoFirework(now);
+          drawFireworksParticles();
+          break;
+      }
+    }
+
+    // ==========================================
+    // 渲染主循环
+    // ==========================================
+    let lastLoopT = 0;
+    function loop(ts) {
+      if (!lastLoopT) lastLoopT = ts;
+      const dt = Math.min(50, ts - lastLoopT);
+      lastLoopT = ts;
+      const now = Date.now();
+      ctx.clearRect(0, 0, W, H);
+
+      if (currentState === 'invitation') {
+        updateShelfLifecycle();
+        for (let i = 0; i < p1Petals.length; i++) p1Petals[i].update();
+        drawPileMass();
+        drawPileContactShadows();
+        for (let i = 0; i < pileOrder.length; i++) pileOrder[i].draw(ctx);
+        for (let i = 0; i < p1Petals.length; i++) {
+          if (p1Petals[i].state !== 'landed') p1Petals[i].draw(ctx);
+        }
+      } else if (currentState === 'windout') {
+        updateWindOut(now);
+      } else if (currentState === 'scroll') {
+        updateScrollScene(dt, now);
+      }
+
+      requestAnimationFrame(loop);
+    }
+
+    // ==========================================
+    // 交互
+    // ==========================================
+    acceptBtn.addEventListener('click', function() {
+      startBgm();
+      initAudio();
+      playChime(175, 0.8);
+      startWindOut();
+    });
+
+    window.addEventListener('pointerdown', function(e) {
+      if (currentState === 'scroll') {
+        initAudio();
+        if (scrollPhase === 'fireworks' && e.clientY < H - 80) {
+          createFirework(e.clientX, e.clientY);
+        }
+      }
+    });
+
+    backBtn.addEventListener('click', function() {
+      currentState = 'invitation';
+      setScrollPhase('idle');
+      scrollRawT = 0; writeElapsed = 0; curCharIdx = 0;
+      controls.classList.remove('visible');
+      page2Overlay.classList.remove('active');
+      page1.classList.remove('hidden');
+      cardElem.classList.remove('blown');
+      fireworks.length = 0;
+      p1Petals.forEach(function(p) { p.dead = false; p.reset(); });
+      updateButtonRect();
+      softResetPile();
+      setTimeout(updateButtonRect, 1300);
+      // 背景音乐继续播放（全程）
+    });
+
+    // ==========================================
+    // 初始化
+    // ==========================================
+    resize();
+    updateButtonRect();
+    buildPetalSprites();   // 先渲染 24 张花瓣精灵图，再生成花瓣
+    for (let i = 0; i < 225; i++) p1Petals.push(new InterceptablePetal(i < 160));
+    setTimeout(updateButtonRect, 300);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(updateButtonRect);
+    requestAnimationFrame(loop);
+  })();
+  </script>
 </body>
 </html>
