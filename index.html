@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kuang &amp; Yang Wedding Invitation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Noto+Serif+SC:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    --bg1:#fdf2f4; --bg2:#f4dde3; --card:#fffdfa;
+    --ink:#4a1f2a; --ink-soft:#8a5763; --gold:#b8895a; --gold-soft:#cdad82;
+  }
+  :root:not([data-theme="light"]){
+    @media (prefers-color-scheme: dark){
+      --bg1:#241218; --bg2:#37181f; --card:#2b1017;
+      --ink:#f4e2e5; --ink-soft:#d3aab3; --gold:#dcb787; --gold-soft:#c99a6c;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg1:#241218; --bg2:#37181f; --card:#2b1017;
+    --ink:#f4e2e5; --ink-soft:#d3aab3; --gold:#dcb787; --gold-soft:#c99a6c;
+  }
+  html{scroll-padding-top:env(safe-area-inset-top,0px)}
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100vh; overflow-x:hidden;
+    background:linear-gradient(165deg,var(--bg1),var(--bg2));
+    display:flex; align-items:center; justify-content:center;
+    padding:48px 20px calc(48px + env(safe-area-inset-bottom,0px));
+    font-family:'Cormorant Garamond',serif;
+  }
+  .petals{position:fixed; inset:0; overflow:hidden; pointer-events:none; z-index:3}
+  .petal{
+    position:absolute; top:-8%; left:var(--x);
+    width:var(--s); height:calc(var(--s) * 1.25);
+    border-radius:0% 60% 0% 60%;
+    opacity:var(--o);
+    animation:fall var(--dur) linear var(--delay) infinite;
+    box-shadow:inset -2px -2px 4px rgba(0,0,0,.08);
+  }
+  @keyframes fall{
+    0%  {transform:translate(0,-10vh) rotate(0deg)}
+    25% {transform:translate(var(--sway),25vh) rotate(90deg)}
+    50% {transform:translate(calc(var(--sway) * -1),50vh) rotate(180deg)}
+    75% {transform:translate(var(--sway),75vh) rotate(270deg)}
+    100%{transform:translate(0,112vh) rotate(360deg)}
+  }
+  @media (prefers-reduced-motion: reduce){ .petal{animation:none; display:none} }
+
+  .card{
+    position:relative; z-index:2; isolation:isolate;
+    width:100%; max-width:420px;
+    background:var(--card);
+    border:1px solid color-mix(in srgb, var(--gold) 45%, transparent);
+    border-radius:3px;
+    padding:52px 38px 44px;
+    text-align:center;
+    box-shadow:0 30px 60px -20px rgba(60,20,30,.35);
+  }
+  .xi{
+    font-family:'Noto Serif SC',serif; font-weight:500;
+    font-size:clamp(48px,11vw,64px); line-height:1;
+    color:var(--gold);
+    text-shadow:0 1px 0 color-mix(in srgb, var(--gold) 60%, transparent);
+    margin:0 0 6px;
+  }
+  .xx{
+    font-style:italic; letter-spacing:.35em;
+    font-size:13px; color:var(--ink-soft); margin:0 0 26px;
+  }
+  .eyebrow{
+    font-size:13px; letter-spacing:.25em; font-weight:500;
+    color:var(--ink-soft); margin:0 0 14px;
+  }
+  .names{
+    font-style:italic; font-weight:600;
+    font-size:clamp(32px,7.5vw,46px); color:var(--ink);
+    margin:0 0 28px; line-height:1.15;
+  }
+  .divider{
+    display:flex; align-items:center; gap:10px;
+    margin:26px auto; width:70%;
+  }
+  .divider::before,.divider::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold-soft),transparent)}
+  .divider span{width:6px;height:6px;background:var(--gold);transform:rotate(45deg);flex:none}
+
+  .date{font-size:22px; color:var(--ink); letter-spacing:.06em; margin:0 0 10px}
+  .line{font-size:17px; color:var(--ink-soft); font-style:italic; margin:0 0 6px}
+  .place{font-size:18px; color:var(--ink); font-weight:500; margin:0 0 4px}
+  .addr{font-size:14px; color:var(--ink-soft); margin:0}
+</style>
+</head>
+<body>
+  <div class="petals" id="petals"></div>
+
+  <div class="card">
+    <p class="xi">囍</p>
+    <p class=""></p>
+    <p class="eyebrow">YOU ARE INVITED TO THE WEDDING OF</p>
+    <p class="names">Kuang &amp; Yang</p>
+
+    <div class="divider"><span></span></div>
+
+    <p class="date">25 November 2026</p>
+    <p class="line">Ceremony at 11:00 a.m.</p>
+    <p class="place">St. Dominic&rsquo;s Catholic Church</p>
+    <p class="addr">108 The Crescent, Homebush West NSW 2140</p>
+
+    <div class="divider"><span></span></div>
+
+    <p class="line">Reception at 1:00 p.m.</p>
+    <p class="place">Hey Restaurant Burwood</p>
+  </div>
+
+<script>
+(function(){
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var colors = ['#e8aab4','#d9808f','#c85c72','#8b3a4a','#f0c3cb'];
+  var wrap = document.getElementById('petals');
+  var n = window.innerWidth < 500 ? 18 : 28;
+  for (var i = 0; i < n; i++){
+    var p = document.createElement('div');
+    p.className = 'petal';
+    var size = 9 + Math.random()*13;
+    var dur = 8 + Math.random()*9;
+    var delay = -Math.random()*dur;
+    var x = Math.random()*100;
+    var sway = (24 + Math.random()*46) + 'px';
+    var o = (0.5 + Math.random()*0.4).toFixed(2);
+    var c1 = colors[Math.floor(Math.random()*colors.length)];
+    var c2 = colors[Math.floor(Math.random()*colors.length)];
+    p.style.cssText = '--s:'+size+'px;--dur:'+dur+'s;--delay:'+delay+'s;--x:'+x+'vw;--sway:'+sway+';--o:'+o+';background:linear-gradient(135deg,'+c1+','+c2+')';
+    wrap.appendChild(p);
+  }
+})();
+</script>
+</body>
+</html>
