@@ -59,23 +59,24 @@
     .splash-btns {
       display: flex; gap: 16px; justify-content: center; flex-wrap: nowrap;
     }
-    /* ★ 尺寸统一修复：固定宽高 + flex 居中。
-       两个按钮不再由内容（不同字体/字距/文案长度）决定大小 */
-    .lang-btn {
+    /* ★ 复查修复（级联隐患）：选择器提升为 .splash-btns .lang-btn（0,2,0）。
+       原来的 .lang-btn（0,1,0）与后文 .accept-btn（0,1,0）同优先级，
+       padding / font-size 实际被 .accept-btn 覆盖——之前靠"固定宽高 +
+       居中溢出"碰巧渲染正确。现在显式接管尺寸属性；字号/字距继续从
+       .accept-btn 继承（19px / 0.18em），渲染结果与之前逐像素一致 */
+    .splash-btns .lang-btn {
       width: 150px; height: 48px;
       display: inline-flex; align-items: center; justify-content: center;
       padding: 0 16px;
-      font-size: 17px; letter-spacing: 0.12em; text-indent: 0.12em;
       white-space: nowrap;
     }
-    .lang-btn.lang-zh {
+    .splash-btns .lang-btn.lang-zh {
       font-family: 'Noto Serif SC', serif;
       letter-spacing: 0.3em; text-indent: 0.3em;
     }
     @media (max-width: 355px) {
       .splash-btns { gap: 10px; }
-      .lang-btn { width: 132px; height: 46px; font-size: 15px; letter-spacing: 0.1em; text-indent: 0.1em; }
-      .lang-btn.lang-zh { font-size: 14px; letter-spacing: 0.24em; text-indent: 0.24em; }
+      .splash-btns .lang-btn { width: 132px; height: 46px; }
     }
     @keyframes riseIn {
       from { opacity: 0; transform: translateY(16px); }
@@ -238,9 +239,7 @@
     }
 
     /* ==========================================
-       底部控制条（烟花页）
-       ★ 尺寸统一修复：等分布局——两按钮严格等宽，
-         与文案长度无关；固定高度；图标列定宽对齐
+       底部控制条（烟花页）：等分布局，两按钮严格等宽
        ========================================== */
     .controls {
       position: fixed; bottom: 24px; left: 50%;
@@ -417,6 +416,12 @@
         ]).catch(function(){})
       : Promise.resolve();
 
+    // ★ 复查修复（字体竞态）：显式跟踪字体是否就绪。
+    //   慢网络下 prewrite 的兜底排版可能在字体到达前用回退字体构建，
+    //   记入 layoutNeedsFontRebuild，字体到达后按书写进度无损重建。
+    let fontsLoaded = false;
+    fontsReady.then(function() { fontsLoaded = true; });
+
     // ==========================================
     // 拦截目标几何 + 花瓣山高度场
     // ==========================================
@@ -532,16 +537,11 @@
       updateButtonRect();
       if (scrollLayout) {
         if (currentState === 'scroll') {
-          const idx = (scrollPhase === 'writing') ? curCharIdx : scrollLayout.totalChars;
-          scrollLayout = null;
-          buildScrollLayout();
-          if (scrollPhase === 'writing' && scrollLayout) {
-            writeElapsed = idx > 0 ? scrollLayout.charEnd[idx - 1] : 0;
-          }
+          rebuildScrollLayoutKeepProgress();
         } else {
           scrollLayout = null;
+          resetInkLayer();
         }
-        resetInkLayer();
       }
     });
 
@@ -563,6 +563,16 @@
     }
 
     window.addEventListener('pointerdown', startBgm, { once: true });
+
+    // ★ 复查新增：切后台暂停 BGM，回前台续播（静音状态不续播）。
+    //   如希望后台继续播放，删除本监听即可。
+    document.addEventListener('visibilitychange', function() {
+      if (document.hidden) {
+        bgm.pause();
+      } else if (soundEnabled && bgmStarted) {
+        bgm.play().catch(function(){});
+      }
+    });
 
     // ==========================================
     // 音效合成引擎
@@ -995,7 +1005,8 @@
       slideOffEdge(dir) {
         let drapeCount = 0;
         for (let i = 0; i < p1Petals.length; i++) {
-          if (p1Petals[i].state === 'landed' && p1Petals[i].isDrape) drapeCount++;
+          // ★ 复查修复：跳过被降级停用但残留 landed 状态的花瓣
+          if (p1Petals[i].active && p1Petals[i].state === 'landed' && p1Petals[i].isDrape) drapeCount++;
         }
         if (Math.random() < 0.45 && drapeCount < 5) {
           this.state = 'settling';
@@ -1136,7 +1147,8 @@
           let maxH = 0;
           for (let i = 0; i < PILE_BINS; i++) if (pileHeights[i] > maxH) maxH = pileHeights[i];
           p1Petals.forEach(function(p) {
-            if (p.state === 'landed') {
+            // ★ 复查修复：active 前置判断
+            if (p.active && p.state === 'landed') {
               const expo = p.isDrape ? 1 : (maxH > 3 ? Math.min(1, Math.max(0, -p.restDY) / maxH) : 0.5);
               p.dislodgeDelay = (1 - expo) * 750 + Math.random() * 450;
             }
@@ -1145,7 +1157,7 @@
       } else if (shelfState === 'blowing') {
         for (let i = 0; i < PILE_BINS; i++) pileHeights[i] *= 0.985;
         if (now - windBlastTimer > 3000) {
-          p1Petals.forEach(function(p) { if (p.state === 'landed') p.dislodge(); });
+          p1Petals.forEach(function(p) { if (p.active && p.state === 'landed') p.dislodge(); });
           pileClear();
           pileHeights.fill(0);
           interceptedCount = 0;
@@ -1274,6 +1286,12 @@
       });
       applyPetalBudget();
 
+      // ★ 复查修复：冻结期内使拦截几何失效。否则 1.5s 内拦截带还停留在
+      //   旧开屏按钮带的位置——正常视口下花瓣够不到（下落需 ~3s），但极矮
+      //   的横屏视口可能有个别花瓣落上过期位置再被踢起。置 0 后 1.5s
+      //   重测即恢复（两处拦截守卫均要求 width > 0）。
+      btnRect.width = 0;
+
       rectFrozen = true;
       setTimeout(function() { rectFrozen = false; updateButtonRect(); }, 1500);
       setTimeout(updateButtonRect, 2100);
@@ -1359,6 +1377,9 @@
     let curCharIdx = 0;
     let scrollLayout = null;
     let paperPattern = null;
+    // ★ 复查修复（字体竞态）：排版若在字体就绪前构建则置 true，
+    //   字体到达后按书写进度重建
+    let layoutNeedsFontRebuild = false;
 
     // —— 静墨缓存层：晕染定形的字符一次性盖章，此后每帧只 blit ——
     let inkLayer = null, inkCtx = null, inkStamped = null, inkKey = '';
@@ -1373,7 +1394,14 @@
       resetInkLayer();
       if (!paperPattern) buildPaperTexture();
       fontsReady.then(function() {
-        if (currentState === 'scroll' && !scrollLayout) buildScrollLayout();
+        if (currentState !== 'scroll') return;
+        if (!scrollLayout) { buildScrollLayout(); return; }
+        // ★ 复查修复：排版是在字体就绪前建的（慢网络下 prewrite 兜底构建）
+        //   → 字体到达后按当前书写进度无损重建
+        if (layoutNeedsFontRebuild) {
+          layoutNeedsFontRebuild = false;
+          rebuildScrollLayoutKeepProgress();
+        }
       });
     }
 
@@ -1458,6 +1486,9 @@
 
     // 排版：英文按空格分词换行；中文逐字换行 + 标点悬挂
     function buildScrollLayout() {
+      // ★ 复查修复：记录本次排版是否发生在字体就绪前
+      layoutNeedsFontRebuild = !fontsLoaded;
+
       const paperW = Math.min(W * 0.92, 1020);
       const paperH = Math.max(240, Math.min(H * 0.48, 380));
       const cx = W / 2, cy = H / 2;
@@ -1568,6 +1599,19 @@
         charRot: charRot, charInk: charInk, charDy: charDy,
         charBleed: charBleed, wickLen: wickLen, wickX: wickX, wickSlant: wickSlant
       };
+    }
+
+    // ★ 复查修复（字体竞态）：按当前书写进度重建排版。
+    //   文本与字符总数不变，idx 在新旧布局间有效（resize / 字体晚到共用）。
+    function rebuildScrollLayoutKeepProgress() {
+      if (!scrollLayout) return;
+      const idx = (scrollPhase === 'writing') ? curCharIdx : scrollLayout.totalChars;
+      scrollLayout = null;
+      buildScrollLayout();
+      if (scrollPhase === 'writing' && scrollLayout) {
+        writeElapsed = idx > 0 ? scrollLayout.charEnd[idx - 1] : 0;
+      }
+      resetInkLayer();
     }
 
     function easeInOutQuad(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
@@ -1961,6 +2005,8 @@
     // ==========================================
     [acceptBtnEn, acceptBtnZh].forEach(function(btn) {
       btn.addEventListener('click', function() {
+        // ★ 复查修复：防止双击/过渡期重复触发 startWindOut
+        if (currentState !== 'invitation') return;
         startBgm();
         initAudio();
         playChime(175, 0.8);
