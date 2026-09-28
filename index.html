@@ -6,10 +6,10 @@
   <meta name="theme-color" content="#f4dde3" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#37181f" media="(prefers-color-scheme: dark)">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8C%B9%3C/text%3E%3C/svg%3E">
-  <title>Kuang &amp; Yang Wedding Invitation</title>
+  <title>Kuang &amp; Yang · Wedding Invitation · 婚礼请柬</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&family=Dancing+Script:wght@600;700&family=Noto+Serif+SC:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&family=Dancing+Script:wght@600;700&family=Noto+Serif+SC:wght@500;600;700&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg1: #fdf2f4; --bg2: #f4dde3; --card: #fffdfa;
@@ -36,6 +36,46 @@
       user-select: none;
     }
 
+    /* ==========================================
+       开屏语言菜单
+       ========================================== */
+    #splash {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      z-index: 12;
+      transition: opacity 1.1s ease;
+    }
+    #splash.hidden { opacity: 0; pointer-events: none; }
+    #splash.gone { display: none; }
+    .splash-inner { text-align: center; width: 100%; max-width: 420px; }
+    .splash-sub {
+      font-family: 'Cormorant Garamond', 'Noto Serif SC', serif;
+      font-size: 14px; color: var(--ink-soft);
+      letter-spacing: .16em; margin: 0 0 28px;
+    }
+    .splash-btns {
+      display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+    }
+    .lang-btn { font-size: 17px; padding: 11px 32px; letter-spacing: 0.12em; }
+    .lang-btn.lang-zh {
+      font-family: 'Noto Serif SC', serif;
+      letter-spacing: 0.3em; text-indent: 0.3em;
+    }
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: none; }
+    }
+    .splash-inner > * { animation: riseIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) backwards; }
+    .splash-inner > :nth-child(1) { animation-delay: 0.10s; }
+    .splash-inner > :nth-child(2) { animation-delay: 0.22s; }
+    .splash-inner > :nth-child(3) { animation-delay: 0.34s; }
+    .splash-inner > :nth-child(4) { animation-delay: 0.46s; }
+    .splash-inner > :nth-child(5) { animation-delay: 0.58s; }
+
+    /* ==========================================
+       请柬页
+       ========================================== */
     #page1 {
       position: absolute; inset: 0;
       display: flex;
@@ -51,6 +91,10 @@
       transform: scale(0.93);
       pointer-events: none;
     }
+    /* 语言切换：同页两卡，只显示当前语言 */
+    #page1 .card { display: none; }
+    #page1.lang-en .card-en { display: block; }
+    #page1.lang-zh .card-zh { display: block; }
 
     .card {
       position: relative;
@@ -105,6 +149,14 @@
     .place { font-size: 17.5px; color: var(--ink); font-weight: 500; margin: 0 0 4px; }
     .addr { font-size: 13.5px; color: var(--ink-soft); margin: 0 0 4px; }
 
+    /* 中文卡片字体适配 */
+    .card-zh { font-family: 'Noto Serif SC', serif; }
+    .card-zh .names { font-style: normal; letter-spacing: 0.08em; }
+    .card-zh .eyebrow { font-size: 14px; letter-spacing: .42em; text-indent: .42em; }
+    .card-zh .date { font-size: 22px; letter-spacing: .12em; font-weight: 600; }
+    .card-zh .line { font-style: normal; letter-spacing: .06em; }
+    #acceptBtnZh { font-family: 'Noto Serif SC', serif; letter-spacing: 0.3em; text-indent: 0.3em; }
+
     .btn-wrapper {
       position: relative;
       margin-top: 34px;
@@ -124,7 +176,7 @@
       font-weight: 600;
       font-size: 19px;
       letter-spacing: 0.18em;
-      text-transform: uppercase;
+      text-transform: none;
       color: #fffaf3;
       background: linear-gradient(180deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%);
       padding: 13px 48px;
@@ -185,7 +237,7 @@
       border: 1px solid rgba(255, 255, 255, 0.25);
       border-radius: 30px;
       color: #f7e6eb;
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'Cormorant Garamond', 'Noto Serif SC', serif;
       font-size: 15px;
       letter-spacing: 0.1em;
       padding: 8px 18px;
@@ -202,8 +254,23 @@
 </head>
 <body>
 
-  <div id="page1">
-    <div class="card" id="cardElem">
+  <!-- ============ 开屏语言菜单 ============ -->
+  <div id="splash">
+    <div class="splash-inner">
+      <div class="xi">囍</div>
+      <div class="names">Kuang &amp; Yang</div>
+      <div class="divider"><span></span></div>
+      <div class="splash-sub">Please select your language · 请选择语言</div>
+      <div class="splash-btns">
+        <button class="accept-btn lang-btn" id="langEnBtn">English</button>
+        <button class="accept-btn lang-btn lang-zh" id="langZhBtn">中文</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 请柬页（中英双卡） ============ -->
+  <div id="page1" class="hidden">
+    <div class="card card-en" id="cardEn">
       <div class="xi">囍</div>
       <div class="eyebrow">YOU ARE INVITED TO THE WEDDING OF</div>
       <div class="names">Kuang &amp; Yang</div>
@@ -217,7 +284,25 @@
       <div class="place">Hey Restaurant Burwood</div>
 
       <div class="btn-wrapper">
-        <button class="accept-btn" id="acceptBtn">Accept</button>
+        <button class="accept-btn" id="acceptBtnEn">Accept</button>
+      </div>
+    </div>
+
+    <div class="card card-zh" id="cardZh">
+      <div class="xi">囍</div>
+      <div class="eyebrow">诚邀您参加我们的婚礼</div>
+      <div class="names">盛况 &amp; 戴杨</div>
+      <div class="divider"><span></span></div>
+      <div class="date">二〇二六年十一月二十五日</div>
+      <div class="line">婚礼仪式 · 上午十一时</div>
+      <div class="place">圣道明天主教堂</div>
+      <div class="addr">108 The Crescent, Homebush West NSW 2140</div>
+      <div class="divider"><span></span></div>
+      <div class="line">婚宴 · 下午一时</div>
+      <div class="place">Hey Restaurant Burwood</div>
+
+      <div class="btn-wrapper">
+        <button class="accept-btn" id="acceptBtnZh">接受邀请</button>
       </div>
     </div>
   </div>
@@ -230,7 +315,7 @@
       <span id="soundIcon">🔔</span> <span id="soundText">Sound On</span>
     </button>
     <button class="ctrl-btn" id="backBtn">
-      <span>✉️</span> View Invitation
+      <span>✉️</span> <span id="backBtnText">View Invitation</span>
     </button>
   </div>
 
@@ -238,17 +323,38 @@
   (function(){
     const canvas = document.getElementById('mainCanvas');
     const ctx = canvas.getContext('2d');
+    const splashEl = document.getElementById('splash');
+    const langEnBtn = document.getElementById('langEnBtn');
+    const langZhBtn = document.getElementById('langZhBtn');
     const page1 = document.getElementById('page1');
     const page2Overlay = document.getElementById('page2Overlay');
-    const cardElem = document.getElementById('cardElem');
-    const acceptBtn = document.getElementById('acceptBtn');
+    const cardEn = document.getElementById('cardEn');
+    const cardZh = document.getElementById('cardZh');
+    const acceptBtnEn = document.getElementById('acceptBtnEn');
+    const acceptBtnZh = document.getElementById('acceptBtnZh');
     const controls = document.getElementById('controls');
     const soundToggle = document.getElementById('soundToggle');
     const soundText = document.getElementById('soundText');
     const soundIcon = document.getElementById('soundIcon');
     const backBtn = document.getElementById('backBtn');
+    const backBtnText = document.getElementById('backBtnText');
 
-    let currentState = 'invitation'; // 'invitation' | 'windout' | 'scroll'
+    // 'splash' → 'invitation' → 'windout' → 'scroll'
+    let currentState = 'splash';
+    let langMode = 'en';                 // 'en' | 'zh'
+    let activeAcceptBtn = acceptBtnEn;
+    let currentMaxShelf = 40;            // 开屏按钮带堆积上限（进入请柬后 100）
+    const SPLASH_ACTIVE_PETALS = 150;    // 开屏阶段激活的花瓣数（请柬阶段 225 全开）
+
+    function currentCard() { return (langMode === 'en') ? cardEn : cardZh; }
+
+    function applyLanguageTexts() {
+      const en = (langMode === 'en');
+      backBtnText.textContent = en ? 'View Invitation' : '查看请柬';
+      soundText.textContent = soundEnabled
+        ? (en ? 'Sound On' : '音效开')
+        : (en ? 'Muted' : '已静音');
+    }
 
     let W = 0, H = 0, dpr = 1;
     function resize() {
@@ -264,15 +370,18 @@
       ? Promise.all([
           document.fonts.load('italic 600 120px "Cormorant Garamond"'),
           document.fonts.load('italic 500 120px "Cormorant Garamond"'),
-          document.fonts.load('700 120px "Dancing Script"')
+          document.fonts.load('700 120px "Dancing Script"'),
+          document.fonts.load('600 120px "Noto Serif SC"'),
+          document.fonts.load('400 120px "Ma Shan Zheng"')
         ]).catch(function(){})
       : Promise.resolve();
 
     // ==========================================
-    // 按钮几何 + 花瓣山高度场（第一页）
+    // 拦截目标几何 + 花瓣山高度场
+    // 目标随状态切换：开屏=两语言按钮组合带；请柬=当前语言的 Accept 按钮
     // ==========================================
     let btnRect = { left: 0, right: 0, top: 0, bottom: 0, width: 0, cx: 0 };
-    let rectFrozen = false; // 返回动画期间冻结测量，防止测到半空中的卡片
+    let rectFrozen = false;   // 过渡动画期间冻结测量
 
     const PILE_BINS = 30;
     const pileHeights = new Float32Array(PILE_BINS);
@@ -281,7 +390,6 @@
     const p1Petals = [];
     const pileOrder = [];
 
-    // ★ 内缩改为 0：高度场覆盖整个按钮宽度，边缘不再有漏花瓣死区
     function syncPileGeometry() {
       const nl = btnRect.left;
       const nr = btnRect.right;
@@ -321,14 +429,32 @@
     }
 
     function updateButtonRect() {
-      if (!acceptBtn) return;
-      if (rectFrozen || page1.classList.contains('hidden') || cardElem.classList.contains('blown')) return;
-      const r = acceptBtn.getBoundingClientRect();
-      btnRect = {
-        left: r.left, right: r.right, top: r.top, bottom: r.bottom,
-        width: r.width, cx: (r.left + r.right) / 2
-      };
-      if (syncPileGeometry() && currentState === 'invitation') softResetPile();
+      if (rectFrozen) return;
+      if (currentState === 'splash') {
+        // 开屏：两语言按钮 + 中间空隙 = 一条组合拦截带
+        if (splashEl.classList.contains('hidden')) return;
+        const r1 = langEnBtn.getBoundingClientRect();
+        const r2 = langZhBtn.getBoundingClientRect();
+        const left = Math.min(r1.left, r2.left);
+        const right = Math.max(r1.right, r2.right);
+        if (right - left <= 0) return;
+        btnRect = {
+          left: left, right: right,
+          top: Math.min(r1.top, r2.top),
+          bottom: Math.max(r1.bottom, r2.bottom),
+          width: right - left, cx: (left + right) / 2
+        };
+      } else {
+        // 请柬：当前语言的 Accept 按钮
+        if (page1.classList.contains('hidden')) return;
+        if (currentCard().classList.contains('blown')) return;
+        const r = activeAcceptBtn.getBoundingClientRect();
+        btnRect = {
+          left: r.left, right: r.right, top: r.top, bottom: r.bottom,
+          width: r.width, cx: (r.left + r.right) / 2
+        };
+      }
+      if (syncPileGeometry() && (currentState === 'invitation' || currentState === 'splash')) softResetPile();
     }
 
     function refreshPileAnchors() {
@@ -367,7 +493,7 @@
       if (bgmStarted) return;
       bgmStarted = true;
       if (soundEnabled) {
-        bgm.play().catch(function(){ /* 文件缺失时静默失败 */ });
+        bgm.play().catch(function(){});
       }
     }
 
@@ -413,7 +539,7 @@
     }
     soundToggle.addEventListener('click', function() {
       soundEnabled = !soundEnabled;
-      soundText.textContent = soundEnabled ? 'Sound On' : 'Muted';
+      applyLanguageTexts();
       soundIcon.textContent = soundEnabled ? '🔔' : '🔕';
       if (soundEnabled) {
         initAudio();
@@ -538,9 +664,8 @@
     }
 
     // ==========================================
-    // 第一页：高度场堆积物理（全员拦截版）
+    // 花瓣物理：全员拦截（开屏/请柬共用同一套）
     // ==========================================
-    const MAX_SHELF_PETALS = 100;
     let interceptedCount = 0;
     let shelfState = 'accumulating';
     let restTimer = 0;
@@ -553,6 +678,7 @@
         this.seed = Math.random() * 100;
         this.state = 'falling';
         this.dead = false;
+        this.active = true;
         this.reset(true);
       }
 
@@ -571,7 +697,7 @@
         this.landOffset = 0;
         this.restRelX = 0;
         this.restDY = 0;
-        this.homeRelX = null; // 相对落点（-1..1，相对按钮中心），每帧实时换算
+        this.homeRelX = null;
         this.spillDir = 1;
 
         this.colorIdx = (Math.random() * PETAL_COLORS.length) | 0;
@@ -589,8 +715,6 @@
         } else {
           this.x = Math.random() * W;
           this.y = init ? Math.random() * H : -40 - Math.random() * 120;
-          // ★ 环境花瓣初始散布时若恰好生在按钮矩形内 → 改从屏幕顶部入场，
-          //   避免第一帧被兜底逻辑"瞬移"上堆
           if (btnRect.width > 0 &&
               this.x > btnRect.left - 6 && this.x < btnRect.right + 6 &&
               this.y > btnRect.top - 10) {
@@ -637,7 +761,6 @@
         this.vx += (targetVx - this.vx) * 0.1;
         this.vy += (targetVy - this.vy) * 0.06;
 
-        // 定向花瓣：实时换算目标列（环境花瓣不转向，飘到哪算哪）
         if (directed && btnRect.width > 0) {
           const homeX = btnRect.cx + this.homeRelX * Math.max(10, (btnRect.width - 30) * 0.5);
           this.vx += (homeX - this.x) * 0.0016;
@@ -649,27 +772,23 @@
         this.angle += this.vAngle * (1.5 - face);
         this.flip += this.vFlip * (0.4 + 0.6 * face);
 
-        // ★ 通用拦截（修复核心 1）：
-        //   对【所有】下落花瓣生效——定向、环境、曾滑落的无一例外。
-        //   判定条件：中心在按钮跨度内 + 花瓣下缘已触及堆面 + 尚在按钮底边之上。
-        //   没有任何时间窗口或豁免期，配合 ≤3px/帧的下落速度，几何上不可能隧穿。
+        // 通用拦截：对一切下落花瓣生效
         if (btnRect.width > 0 && pileTop > 0 &&
             this.x >= pileLeft && this.x <= pileRight) {
           const sx = Math.min(Math.max(this.x, pileLeft + 2), pileRight - 2);
           const h = Math.max(0, pileHeightAt(sx));
           const gy = pileTop - h;
           if (this.y + this.size * 0.38 >= gy && this.y < btnRect.bottom) {
-            if (shelfState === 'accumulating' && interceptedCount < MAX_SHELF_PETALS) {
+            if (shelfState === 'accumulating' && interceptedCount < currentMaxShelf) {
               this.handleContact(gy);
             } else {
-              this.spillOff(gy);   // 堆满/静置/吹散期 → 沿堆面翻滚离开，绝不穿透
+              this.spillOff(gy);
             }
             return;
           }
         }
 
-        // ★ 硬性兜底（修复核心 2）：
-        //   任何花瓣闯入按钮矩形内部（±4px 容差，覆盖贴边擦过者）→ 强制送上堆顶。
+        // 硬性兜底：闯入目标矩形内部 → 强制送上堆顶
         if (btnRect.width > 0 && pileTop > 0 &&
             this.x > btnRect.left - 4 && this.x < btnRect.right + 4 &&
             this.y > pileTop - 2 && this.y < btnRect.bottom) {
@@ -677,7 +796,7 @@
           const gy = pileTop - Math.max(0, pileHeightAt(cx));
           this.x = cx;
           if (this.y > gy) this.y = gy - 1;
-          if (shelfState === 'accumulating' && interceptedCount < MAX_SHELF_PETALS) {
+          if (shelfState === 'accumulating' && interceptedCount < currentMaxShelf) {
             this.handleContact(gy);
           } else {
             this.spillOff(gy);
@@ -756,12 +875,10 @@
         }
       }
 
-      // ★ 堆满/静置/吹散期抵达的花瓣：沿堆面向最近一侧翻滚，滑出按钮脚印后继续下落
-      //   （取代旧的"弹开+放弃"机制——那个机制会让花瓣沉入按钮）
       spillOff(gy) {
         this.state = 'spilling';
         this.isDrape = false;
-        this.gaveUp = true;       // 本轮不再被吸回按钮（落出屏幕后 reset 恢复定向）
+        this.gaveUp = true;
         this.homeRelX = null;
         this.spillDir = (this.x <= btnRect.cx) ? -1 : 1;
         this.vx = this.spillDir * (1.8 + Math.random() * 1.2);
@@ -774,7 +891,6 @@
         if (btnRect.width <= 0) { this.state = 'falling'; return; }
         const dir = this.spillDir || 1;
 
-        // 持续侧向推力（不会被摆动抵消）→ 必然滑出按钮范围
         this.vx += dir * 0.06;
         this.vx *= 0.985;
         if (Math.abs(this.vx) > 4.5) this.vx = 4.5 * dir;
@@ -782,13 +898,11 @@
         this.angle += this.vAngle;
         this.flip += 0.028;
 
-        // 贴着堆面滑行（翻过堆顶再落下）
         const sx = Math.min(Math.max(this.x, pileLeft + 2), pileRight - 2);
         const h = Math.max(0, pileHeightAt(sx));
         const gy = pileTop - h;
         this.y += (gy - this.size * 0.30 - this.y) * 0.28;
 
-        // 完全离开按钮脚印后才恢复自由下落
         if (this.x < btnRect.left - this.size * 0.5 || this.x > btnRect.right + this.size * 0.5) {
           this.state = 'falling';
           this.vx = dir * (1.0 + Math.random() * 0.8);
@@ -880,7 +994,7 @@
           }
         }
 
-        if (interceptedCount >= MAX_SHELF_PETALS && shelfState === 'accumulating') {
+        if (interceptedCount >= currentMaxShelf && shelfState === 'accumulating') {
           shelfState = 'resting';
           restTimer = Date.now();
         }
@@ -981,6 +1095,7 @@
       interceptedCount = 0;
       shelfState = 'accumulating';
       p1Petals.forEach(function(p) {
+        if (!p.active) return;
         if (p.state === 'landed' || p.state === 'settling' || p.state === 'sliding' ||
             p.state === 'contact' || p.state === 'spilling') {
           p.state = 'falling';
@@ -1031,6 +1146,55 @@
     }
 
     // ==========================================
+    // 开屏 → 请柬：语言切换
+    // ==========================================
+    function switchToInvitation(lang) {
+      langMode = lang;
+      activeAcceptBtn = (lang === 'en') ? acceptBtnEn : acceptBtnZh;
+      applyLanguageTexts();
+      currentMaxShelf = 100;               // 请柬页堆积上限
+      currentState = 'invitation';
+
+      // 开屏淡出，1.2s 后彻底移出 DOM
+      splashEl.classList.add('hidden');
+      setTimeout(function() { splashEl.classList.add('gone'); }, 1200);
+
+      // 切换请柬卡片语言并淡入
+      page1.classList.remove('lang-en', 'lang-zh');
+      page1.classList.add('lang-' + lang);
+      page1.classList.remove('hidden');
+
+      // 全部花瓣重新从顶部入场（含激活开屏阶段未启用的 75 片）
+      pileOrder.length = 0;
+      pileHeights.fill(0);
+      interceptedCount = 0;
+      shelfState = 'accumulating';
+      p1Petals.forEach(function(p) {
+        p.active = true;
+        p.dead = false;
+        p.reset();
+      });
+
+      // 请柬淡入动画期间冻结测量，过渡结束后校准到 Accept 按钮
+      rectFrozen = true;
+      setTimeout(function() { rectFrozen = false; updateButtonRect(); }, 1500);
+      setTimeout(updateButtonRect, 2100);
+      setTimeout(updateButtonRect, 2700);
+      playChime(392, 0.9);
+    }
+
+    langEnBtn.addEventListener('click', function() {
+      startBgm();
+      initAudio();
+      switchToInvitation('en');
+    });
+    langZhBtn.addEventListener('click', function() {
+      startBgm();
+      initAudio();
+      switchToInvitation('zh');
+    });
+
+    // ==========================================
     // 转场：大风卷走全部花瓣
     // ==========================================
     let windoutStart = 0;
@@ -1050,13 +1214,13 @@
         if (p.alpha < 0.6) p.alpha = 0.85;
       });
       page2Overlay.classList.add('active');
-      setTimeout(function() { cardElem.classList.add('blown'); }, 450);
+      setTimeout(function() { currentCard().classList.add('blown'); }, 450);
     }
 
     function updateWindOut(now) {
       for (let i = 0; i < p1Petals.length; i++) {
         const p = p1Petals[i];
-        if (p.dead) continue;
+        if (p.dead || !p.active) continue;
         p.vx += 0.55 + Math.random() * 0.25;
         p.vy -= 0.34 + Math.random() * 0.18;
         p.vy += Math.sin(now * 0.01 + p.seed) * 0.12;
@@ -1071,13 +1235,22 @@
     }
 
     // ==========================================
-    // 第二页：红宣纸卷轴 + 墨迹晕染书写 + 烟花
+    // 第二页：卷轴书写（中英双引擎）+ 烟花
     // ==========================================
-    const SCROLL_TEXT = "Thank you for accepting our invitation. Please feel free to reach out directly if you have any requests.";
+    const SCROLL_TEXTS = {
+      en: "Thank you for accepting our invitation. Please feel free to reach out directly if you have any requests.",
+      zh: "感谢您接受我们的邀请。如有任何需求，请及时与我们联系。"
+    };
+
+    function scrollFont(size) {
+      return (langMode === 'en')
+        ? '700 ' + size + "px 'Dancing Script', cursive"
+        : size + "px 'Ma Shan Zheng', cursive";
+    }
 
     const OPEN_MS  = 1400;
     const PREWRITE_MS = 420;
-    const PAUSE_MS = 3000;
+    const PAUSE_MS = 3200;
     const CLOSE_MS = 1300;
     const FADE_MS  = 800;
 
@@ -1125,46 +1298,65 @@
       paperPattern = ctx.createPattern(t, 'repeat');
     }
 
+    // 排版：英文按空格分词换行；中文逐字换行 + 标点悬挂
     function buildScrollLayout() {
       const paperW = Math.min(W * 0.92, 1020);
-      const paperH = Math.max(230, Math.min(H * 0.46, 370));
+      const paperH = Math.max(240, Math.min(H * 0.48, 380));
       const cx = W / 2, cy = H / 2;
-      const padX = Math.max(30, paperW * 0.07);
+      const padX = Math.max(30, paperW * 0.08);
       const maxTextW = paperW - padX * 2;
-      const maxTextH = paperH - 84;
+      const maxTextH = paperH - 90;
 
-      let fs = paperW < 560 ? 26 : 32;
+      const isZh = (langMode === 'zh');
+      const text = SCROLL_TEXTS[langMode];
+      let fs = isZh ? (paperW < 560 ? 30 : 36) : (paperW < 560 ? 26 : 32);
+      const lineGap = isZh ? 1.9 : 1.52;
+
       const layout = function(size) {
-        ctx.font = '700 ' + size + "px 'Dancing Script', cursive";
-        const words = SCROLL_TEXT.split(' ');
+        ctx.font = scrollFont(size);
         const lines = [];
-        let cur = '', curW = 0;
-        const spaceW = ctx.measureText(' ').width;
-        for (let i = 0; i < words.length; i++) {
-          const w = words[i];
-          const ww = ctx.measureText(w).width;
-          if (cur && curW + spaceW + ww > maxTextW) {
-            lines.push(cur); cur = w; curW = ww;
-          } else if (cur) {
-            cur += ' ' + w; curW += spaceW + ww;
-          } else {
-            cur = w; curW = ww;
+        if (isZh) {
+          let cur = '', curW = 0;
+          for (let i = 0; i < text.length; i++) {
+            const ch = text[i];
+            const cw = ctx.measureText(ch).width;
+            const isPunct = (ch === '。' || ch === '，' || ch === '、');
+            if (cur && curW + cw > maxTextW && !isPunct) {
+              lines.push(cur); cur = ch; curW = cw;
+            } else {
+              cur += ch; curW += cw;
+            }
           }
+          if (cur) lines.push(cur);
+        } else {
+          const words = text.split(' ');
+          let cur = '', curW = 0;
+          const spaceW = ctx.measureText(' ').width;
+          for (let i = 0; i < words.length; i++) {
+            const ww = ctx.measureText(words[i]).width;
+            if (cur && curW + spaceW + ww > maxTextW) {
+              lines.push(cur); cur = words[i]; curW = ww;
+            } else if (cur) {
+              cur += ' ' + words[i]; curW += spaceW + ww;
+            } else {
+              cur = words[i]; curW = ww;
+            }
+          }
+          if (cur) lines.push(cur);
         }
-        if (cur) lines.push(cur);
         return lines;
       };
 
       let lines = layout(fs);
-      let lineH = fs * 1.52;
+      let lineH = fs * lineGap;
       for (let k = 0; k < 2; k++) {
         if (lines.length * lineH > maxTextH) {
           fs = Math.max(15, fs * (maxTextH / (lines.length * lineH)) * 0.96);
           lines = layout(fs);
-          lineH = fs * 1.52;
+          lineH = fs * lineGap;
         }
       }
-      ctx.font = '700 ' + fs + "px 'Dancing Script', cursive";
+      ctx.font = scrollFont(fs);
 
       const lineObjs = [];
       let totalChars = 0;
@@ -1181,16 +1373,21 @@
         lineObjs.push({ chars: chars, width: lw });
       }
       const totalH = lines.length * lineH;
-      const startY = cy - totalH / 2 + lineH * 0.62;
+      const startY = cy - totalH / 2 + lineH * (isZh ? 0.66 : 0.62);
       for (let i = 0; i < lineObjs.length; i++) lineObjs[i].y = startY + i * lineH;
 
+      // 书写节奏：英文 82/36/560；中文毛笔 240/300/520
       const charEnd = [];
-      let t = 260;
+      let t = isZh ? 400 : 260;
       for (let li = 0; li < lineObjs.length; li++) {
         const cs = lineObjs[li].chars;
         for (let ci = 0; ci < cs.length; ci++) {
           const ch = cs[ci].ch;
-          t += (ch === ' ') ? 36 : (ch === '.') ? 560 : 82;
+          if (isZh) {
+            t += (ch === '。') ? 520 : (ch === '，' || ch === '、') ? 300 : 240;
+          } else {
+            t += (ch === ' ') ? 36 : (ch === '.') ? 560 : 82;
+          }
           charEnd.push(t);
         }
       }
@@ -1201,7 +1398,7 @@
         charRot.push((Math.random() - 0.5) * 0.05);
         charInk.push(0.86 + Math.random() * 0.14);
         charDy.push((Math.random() - 0.5) * 2);
-        charBleed.push(520 + Math.random() * 420);
+        charBleed.push(520 + Math.random() * 440);
         wickLen.push(Math.random() < 0.34 ? 0 : 2.5 + Math.random() * 4.5);
         wickX.push((Math.random() - 0.5) * 10);
         wickSlant.push((Math.random() - 0.5) * 1.6);
@@ -1234,7 +1431,7 @@
       }
       curCharIdx = Math.min(idx, L.totalChars);
 
-      ctx.font = '700 ' + L.fs + "px 'Dancing Script', cursive";
+      ctx.font = scrollFont(L.fs);
       ctx.textAlign = 'center';
       ctx.textBaseline = 'alphabetic';
 
@@ -1247,6 +1444,7 @@
           const cy = lo.y + L.charDy[gi];
 
           if (gi < idx) {
+            // 已写完：墨迹在生宣上晕开
             const b = Math.min(1, Math.max(0, (elapsed - L.charEnd[gi]) / L.charBleed[gi]));
 
             if (b > 0.02) {
@@ -1279,6 +1477,7 @@
               ctx.stroke();
             }
           } else if (gi === idx && c.ch !== ' ') {
+            // 正在落笔：墨滴收缩定形
             const e = easeOutCubic(Math.max(0, Math.min(1, p)));
             ctx.save();
             ctx.translate(cx, cy - (1 - e) * 3);
@@ -1536,15 +1735,18 @@
       const now = Date.now();
       ctx.clearRect(0, 0, W, H);
 
-      if (currentState === 'invitation') {
+      if (currentState === 'splash' || currentState === 'invitation') {
         refreshPileAnchors();
         updateShelfLifecycle();
-        for (let i = 0; i < p1Petals.length; i++) p1Petals[i].update();
+        for (let i = 0; i < p1Petals.length; i++) {
+          if (p1Petals[i].active) p1Petals[i].update();
+        }
         drawPileMass();
         drawPileContactShadows();
         for (let i = 0; i < pileOrder.length; i++) pileOrder[i].draw(ctx);
         for (let i = 0; i < p1Petals.length; i++) {
-          if (p1Petals[i].state !== 'landed') p1Petals[i].draw(ctx);
+          const p = p1Petals[i];
+          if (p.active && p.state !== 'landed') p.draw(ctx);
         }
       } else if (currentState === 'windout') {
         updateWindOut(now);
@@ -1558,11 +1760,13 @@
     // ==========================================
     // 交互
     // ==========================================
-    acceptBtn.addEventListener('click', function() {
-      startBgm();
-      initAudio();
-      playChime(175, 0.8);
-      startWindOut();
+    [acceptBtnEn, acceptBtnZh].forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        startBgm();
+        initAudio();
+        playChime(175, 0.8);
+        startWindOut();
+      });
     });
 
     window.addEventListener('pointerdown', function(e) {
@@ -1575,31 +1779,39 @@
     });
 
     backBtn.addEventListener('click', function() {
+      // 返回当前语言的请柬页（语言保持，不回开屏）
       currentState = 'invitation';
       setScrollPhase('idle');
       scrollRawT = 0; writeElapsed = 0; curCharIdx = 0;
       controls.classList.remove('visible');
       page2Overlay.classList.remove('active');
       page1.classList.remove('hidden');
-      cardElem.classList.remove('blown');
+      cardEn.classList.remove('blown');
+      cardZh.classList.remove('blown');
       fireworks.length = 0;
-      p1Petals.forEach(function(p) { p.dead = false; p.reset(); });
+      p1Petals.forEach(function(p) { p.active = true; p.dead = false; p.reset(); });
       softResetPile();
 
-      // 返回动画期间冻结测量，过渡结束后分三次校准
       rectFrozen = true;
       setTimeout(function() { rectFrozen = false; updateButtonRect(); }, 1900);
       setTimeout(updateButtonRect, 2400);
       setTimeout(updateButtonRect, 3000);
+      // 背景音乐继续播放
     });
 
     // ==========================================
     // 初始化
     // ==========================================
     resize();
-    updateButtonRect();
+    updateButtonRect();          // 测量开屏两按钮组合带
     buildPetalSprites();
-    for (let i = 0; i < 225; i++) p1Petals.push(new InterceptablePetal(i < 160));
+    for (let i = 0; i < 225; i++) {
+      const p = new InterceptablePetal(i < 160);
+      p.active = (i < SPLASH_ACTIVE_PETALS);   // 开屏阶段先激活 150 片
+      if (!p.active) p.dead = true;
+      p1Petals.push(p);
+    }
+    applyLanguageTexts();
     setTimeout(updateButtonRect, 300);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(updateButtonRect);
     requestAnimationFrame(loop);
