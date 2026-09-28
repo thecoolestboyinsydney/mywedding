@@ -272,6 +272,7 @@
     // 按钮几何 + 花瓣山高度场（第一页）
     // ==========================================
     let btnRect = { left: 0, right: 0, top: 0, bottom: 0, width: 0, cx: 0 };
+    let rectFrozen = false; // 返回动画期间冻结测量，防止测到半空中的卡片
 
     const PILE_BINS = 30;
     const pileHeights = new Float32Array(PILE_BINS);
@@ -280,10 +281,10 @@
     const p1Petals = [];
     const pileOrder = [];
 
+    // ★ 内缩改为 0：高度场覆盖整个按钮宽度，边缘不再有漏花瓣死区
     function syncPileGeometry() {
-      const inset = 4;
-      const nl = btnRect.left + inset;
-      const nr = btnRect.right - inset;
+      const nl = btnRect.left;
+      const nr = btnRect.right;
       const nw = Math.max(10, nr - nl);
       const changed = pileBinW === 0 || Math.abs(nw - pileBinW * PILE_BINS) > 1.5;
       pileLeft = nl; pileRight = nr; pileTop = btnRect.top;
@@ -321,6 +322,7 @@
 
     function updateButtonRect() {
       if (!acceptBtn) return;
+      if (rectFrozen || page1.classList.contains('hidden') || cardElem.classList.contains('blown')) return;
       const r = acceptBtn.getBoundingClientRect();
       btnRect = {
         left: r.left, right: r.right, top: r.top, bottom: r.bottom,
@@ -328,6 +330,15 @@
       };
       if (syncPileGeometry() && currentState === 'invitation') softResetPile();
     }
+
+    function refreshPileAnchors() {
+      if (btnRect.width <= 0 || pileBinW === 0) return;
+      const nl = btnRect.left, nr = btnRect.right;
+      if (Math.abs((nr - nl) - pileBinW * PILE_BINS) <= 1.5) {
+        pileLeft = nl; pileRight = nr; pileTop = btnRect.top;
+      }
+    }
+
     page1.addEventListener('scroll', updateButtonRect, { passive: true });
 
     window.addEventListener('resize', function() {
@@ -345,8 +356,6 @@
 
     // ==========================================
     // 背景音乐：《渡情》伴奏版（循环播放）
-    // 将伴奏 MP3 重命名为 duqing-instrumental.mp3，
-    // 与本 HTML 文件放在同一目录下即可。
     // ==========================================
     const bgm = new Audio('duqing-instrumental.mp3');
     bgm.loop = true;
@@ -362,7 +371,6 @@
       }
     }
 
-    // 首次任意用户手势启动背景音乐（浏览器自动播放策略要求）
     window.addEventListener('pointerdown', startBgm, { once: true });
 
     // ==========================================
@@ -403,7 +411,6 @@
         osc.start(); osc.stop(audioCtx.currentTime + 0.3);
       } catch(e){}
     }
-    // 声音开关同时控制背景音乐与音效
     soundToggle.addEventListener('click', function() {
       soundEnabled = !soundEnabled;
       soundText.textContent = soundEnabled ? 'Sound On' : 'Muted';
@@ -420,21 +427,20 @@
     // 玫瑰花瓣：8 色 × 3 形 = 24 种精灵图（预渲染）
     // ==========================================
     const PETAL_COLORS = [
-      { light: '#f7c6d2', c1: '#e08ba0', deep: '#a63e5c' },  // 粉玫瑰
-      { light: '#f4b8c8', c1: '#d67087', deep: '#93304b' },  // 艳粉
-      { light: '#fad6de', c1: '#eda6b6', deep: '#c06d81' },  // 浅粉
-      { light: '#f2a5b8', c1: '#cf5c76', deep: '#8a2943' },  // 玫红
-      { light: '#fde5ea', c1: '#f4c3ce', deep: '#d795a6' },  // 樱粉
-      { light: '#f9d3c8', c1: '#e79c8c', deep: '#b0604c' },  // 珊瑚粉
-      { light: '#efa7b4', c1: '#c94f66', deep: '#7e1e36' },  // 深红玫瑰
-      { light: '#fdeef2', c1: '#f3ced8', deep: '#dfa4b3' }   // 素白粉
+      { light: '#f7c6d2', c1: '#e08ba0', deep: '#a63e5c' },
+      { light: '#f4b8c8', c1: '#d67087', deep: '#93304b' },
+      { light: '#fad6de', c1: '#eda6b6', deep: '#c06d81' },
+      { light: '#f2a5b8', c1: '#cf5c76', deep: '#8a2943' },
+      { light: '#fde5ea', c1: '#f4c3ce', deep: '#d795a6' },
+      { light: '#f9d3c8', c1: '#e79c8c', deep: '#b0604c' },
+      { light: '#efa7b4', c1: '#c94f66', deep: '#7e1e36' },
+      { light: '#fdeef2', c1: '#f3ced8', deep: '#dfa4b3' }
     ];
     const PETAL_SHAPE_COUNT = 3;
 
     const SPRITE_SIZE = 96;
-    const PETAL_SPRITES = []; // [colorIdx][shapeIdx] -> canvas
+    const PETAL_SPRITES = [];
 
-    // 在离屏画布上绘制一种花瓣（窄基 → 宽弧 → 波浪瓣缘 + 瓣脉/高光）
     function drawPetalShape(g, s, shapeIdx, color) {
       const grad = g.createLinearGradient(0, s * 0.92, 0, -s * 0.85);
       grad.addColorStop(0, color.deep);
@@ -444,7 +450,6 @@
 
       g.beginPath();
       if (shapeIdx === 0) {
-        // —— 形 0：经典玫瑰瓣（宽顶、波浪缘、中央浅凹）——
         g.moveTo(0, s * 0.92);
         g.bezierCurveTo(s * 0.52, s * 0.52, s * 0.74, s * 0.02, s * 0.60, -s * 0.30);
         g.quadraticCurveTo(s * 0.56, -s * 0.68, s * 0.28, -s * 0.70);
@@ -453,7 +458,6 @@
         g.quadraticCurveTo(-s * 0.56, -s * 0.68, -s * 0.60, -s * 0.30);
         g.bezierCurveTo(-s * 0.74, s * 0.02, -s * 0.52, s * 0.52, 0, s * 0.92);
       } else if (shapeIdx === 1) {
-        // —— 形 1：圆润杯状瓣（更窄更圆、瓣缘柔和）——
         g.moveTo(0, s * 0.95);
         g.bezierCurveTo(s * 0.50, s * 0.60, s * 0.66, s * 0.05, s * 0.52, -s * 0.35);
         g.quadraticCurveTo(s * 0.46, -s * 0.70, s * 0.20, -s * 0.62);
@@ -462,7 +466,6 @@
         g.quadraticCurveTo(-s * 0.46, -s * 0.70, -s * 0.52, -s * 0.35);
         g.bezierCurveTo(-s * 0.66, s * 0.05, -s * 0.50, s * 0.60, 0, s * 0.95);
       } else {
-        // —— 形 2：宽瓣深凹（外层大瓣、心形凹口更明显）——
         g.moveTo(0, s * 0.88);
         g.bezierCurveTo(s * 0.58, s * 0.50, s * 0.80, s * 0.00, s * 0.66, -s * 0.28);
         g.quadraticCurveTo(s * 0.62, -s * 0.62, s * 0.34, -s * 0.66);
@@ -474,12 +477,10 @@
       g.closePath();
       g.fill();
 
-      // 瓣缘高光
       g.strokeStyle = 'rgba(255,246,240,0.28)';
       g.lineWidth = Math.max(0.6, s * 0.05);
       g.stroke();
 
-      // 中央折痕瓣脉
       g.strokeStyle = 'rgba(96,22,40,0.28)';
       g.lineWidth = Math.max(0.5, s * 0.045);
       g.beginPath();
@@ -487,7 +488,6 @@
       g.bezierCurveTo(s * 0.10, s * 0.22, -s * 0.10, -s * 0.18, 0, -s * 0.52);
       g.stroke();
 
-      // 两侧细瓣脉
       g.strokeStyle = 'rgba(96,22,40,0.14)';
       g.beginPath();
       g.moveTo(s * 0.14, s * 0.34);
@@ -496,7 +496,6 @@
       g.quadraticCurveTo(-s * 0.30, -s * 0.04, -s * 0.26, -s * 0.40);
       g.stroke();
 
-      // 顶部釉面高光
       g.fillStyle = 'rgba(255,255,255,0.10)';
       g.beginPath();
       g.ellipse(0, -s * 0.30, s * 0.24, s * 0.12, -0.25, 0, Math.PI * 2);
@@ -517,7 +516,6 @@
       }
     }
 
-    // 运行时绘制：仅做变换 + drawImage（开销极低）
     function drawSinglePetal(ctx, x, y, size, angle, flip, tilt, alpha, colorIdx, shapeIdx) {
       if (alpha <= 0.005) return;
       const sprite = PETAL_SPRITES[colorIdx] && PETAL_SPRITES[colorIdx][shapeIdx];
@@ -540,7 +538,7 @@
     }
 
     // ==========================================
-    // 第一页：高度场堆积物理
+    // 第一页：高度场堆积物理（全员拦截版）
     // ==========================================
     const MAX_SHELF_PETALS = 100;
     let interceptedCount = 0;
@@ -566,8 +564,6 @@
         this.state = 'falling';
         this.isDrape = false;
         this.gaveUp = false;
-        this.ejectT = 0;
-        this.rolls = 0;
         this.bounces = 0;
         this.expo = 0;
         this.jolt = 0;
@@ -575,25 +571,31 @@
         this.landOffset = 0;
         this.restRelX = 0;
         this.restDY = 0;
-        this.homeX = null;
+        this.homeRelX = null; // 相对落点（-1..1，相对按钮中心），每帧实时换算
+        this.spillDir = 1;
 
-        // 每次重生重新随机外观 → 24 种组合持续轮换
         this.colorIdx = (Math.random() * PETAL_COLORS.length) | 0;
         this.shapeIdx = (Math.random() * PETAL_SHAPE_COUNT) | 0;
-        // 形 2（宽瓣）略小、形 1（窄瓣）略大，视觉面积更均衡
         this.size = (this.shapeIdx === 2 ? 11 : this.shapeIdx === 1 ? 13 : 12) + Math.random() * 7;
 
         if (this.isTargeted && btnRect.width > 0) {
-          const half = (btnRect.width - 30) * 0.5;
+          const half = Math.max(10, (btnRect.width - 30) * 0.5);
           const tri = (Math.random() + Math.random() - 1);
-          this.homeX = btnRect.cx + tri * half;
-          this.x = this.homeX + (Math.random() - 0.5) * 26;
+          this.homeRelX = tri;
+          this.x = btnRect.cx + tri * half + (Math.random() - 0.5) * 26;
           this.y = init ? -Math.random() * H * 0.6 : -30 - Math.random() * 90;
           this.drift = (Math.random() - 0.5) * 0.1;
           this.termV = 1.5 + Math.random() * 0.9;
         } else {
           this.x = Math.random() * W;
           this.y = init ? Math.random() * H : -40 - Math.random() * 120;
+          // ★ 环境花瓣初始散布时若恰好生在按钮矩形内 → 改从屏幕顶部入场，
+          //   避免第一帧被兜底逻辑"瞬移"上堆
+          if (btnRect.width > 0 &&
+              this.x > btnRect.left - 6 && this.x < btnRect.right + 6 &&
+              this.y > btnRect.top - 10) {
+            this.y = -30 - Math.random() * 90;
+          }
           this.drift = (Math.random() - 0.5) * 0.5;
           this.termV = 1.3 + Math.random() * 1.0;
         }
@@ -616,6 +618,7 @@
           case 'falling':  this.updateFalling();  break;
           case 'contact':  this.updateContact();  break;
           case 'sliding':  this.updateSliding();  break;
+          case 'spilling': this.updateSpilling(); break;
           case 'settling': this.updateSettling(); break;
           case 'landed':   this.updateLanded();   break;
           case 'blowing':  this.updateBlowing();  break;
@@ -623,19 +626,21 @@
       }
 
       updateFalling() {
-        if (this.ejectT > 0) this.ejectT--;
+        const directed = (this.homeRelX != null && !this.gaveUp);
 
         this.tilt += this.vTilt;
         const face = 0.3 + 0.7 * Math.abs(Math.cos(this.tilt));
         this.swayPhase += this.swayRate;
-        const swayAmp = (this.homeX != null) ? 0.26 : 0.5;
+        const swayAmp = directed ? 0.26 : 0.5;
         const targetVx = Math.sin(this.swayPhase) * swayAmp * (0.5 + 0.5 * face) + this.drift;
         const targetVy = this.termV * (1.28 - 0.6 * face);
         this.vx += (targetVx - this.vx) * 0.1;
         this.vy += (targetVy - this.vy) * 0.06;
 
-        if (this.homeX != null) {
-          this.vx += (this.homeX - this.x) * 0.0016;
+        // 定向花瓣：实时换算目标列（环境花瓣不转向，飘到哪算哪）
+        if (directed && btnRect.width > 0) {
+          const homeX = btnRect.cx + this.homeRelX * Math.max(10, (btnRect.width - 30) * 0.5);
+          this.vx += (homeX - this.x) * 0.0016;
           this.vx *= 0.995;
         }
 
@@ -644,36 +649,39 @@
         this.angle += this.vAngle * (1.5 - face);
         this.flip += this.vFlip * (0.4 + 0.6 * face);
 
-        const directed = (this.homeX != null && !this.gaveUp);
-
-        if (directed && this.ejectT <= 0 && btnRect.width > 0 && pileTop > 0) {
-          const h = pileHeightAt(this.x);
-          if (h >= 0) {
-            const gy = pileTop - h;
-            if (this.y + this.size * 0.38 >= gy && this.y < pileTop + 10) {
-              if (shelfState === 'accumulating' && interceptedCount < MAX_SHELF_PETALS) {
-                this.handleContact(gy);
-                return;
-              } else {
-                const relX = (this.x - btnRect.cx) / (btnRect.width * 0.5);
-                this.vx += (relX >= 0 ? 1 : -1) * (0.7 + Math.random() * 0.6);
-                this.vy *= 0.4;
-                this.y = gy - this.size * 0.42;
-                this.ejectT = 22;
-                if (++this.rolls > 2) { this.gaveUp = true; this.homeX = null; }
-              }
+        // ★ 通用拦截（修复核心 1）：
+        //   对【所有】下落花瓣生效——定向、环境、曾滑落的无一例外。
+        //   判定条件：中心在按钮跨度内 + 花瓣下缘已触及堆面 + 尚在按钮底边之上。
+        //   没有任何时间窗口或豁免期，配合 ≤3px/帧的下落速度，几何上不可能隧穿。
+        if (btnRect.width > 0 && pileTop > 0 &&
+            this.x >= pileLeft && this.x <= pileRight) {
+          const sx = Math.min(Math.max(this.x, pileLeft + 2), pileRight - 2);
+          const h = Math.max(0, pileHeightAt(sx));
+          const gy = pileTop - h;
+          if (this.y + this.size * 0.38 >= gy && this.y < btnRect.bottom) {
+            if (shelfState === 'accumulating' && interceptedCount < MAX_SHELF_PETALS) {
+              this.handleContact(gy);
+            } else {
+              this.spillOff(gy);   // 堆满/静置/吹散期 → 沿堆面翻滚离开，绝不穿透
             }
+            return;
           }
         }
 
-        // 兜底保险：绝不允许定向花瓣穿过按钮矩形
-        if (directed && this.ejectT <= 0 && pileTop > 0 && btnRect.width > 0 &&
-            this.x > btnRect.left - 8 && this.x < btnRect.right + 8 &&
-            this.y > pileTop - 2 && this.y < btnRect.bottom + 26) {
+        // ★ 硬性兜底（修复核心 2）：
+        //   任何花瓣闯入按钮矩形内部（±4px 容差，覆盖贴边擦过者）→ 强制送上堆顶。
+        if (btnRect.width > 0 && pileTop > 0 &&
+            this.x > btnRect.left - 4 && this.x < btnRect.right + 4 &&
+            this.y > pileTop - 2 && this.y < btnRect.bottom) {
           const cx = Math.min(Math.max(this.x, pileLeft + 2), pileRight - 2);
+          const gy = pileTop - Math.max(0, pileHeightAt(cx));
           this.x = cx;
-          if (this.y > pileTop + 4) this.y = pileTop - 2;
-          this.handleContact(pileTop - Math.max(0, pileHeightAt(cx)));
+          if (this.y > gy) this.y = gy - 1;
+          if (shelfState === 'accumulating' && interceptedCount < MAX_SHELF_PETALS) {
+            this.handleContact(gy);
+          } else {
+            this.spillOff(gy);
+          }
           return;
         }
 
@@ -748,6 +756,46 @@
         }
       }
 
+      // ★ 堆满/静置/吹散期抵达的花瓣：沿堆面向最近一侧翻滚，滑出按钮脚印后继续下落
+      //   （取代旧的"弹开+放弃"机制——那个机制会让花瓣沉入按钮）
+      spillOff(gy) {
+        this.state = 'spilling';
+        this.isDrape = false;
+        this.gaveUp = true;       // 本轮不再被吸回按钮（落出屏幕后 reset 恢复定向）
+        this.homeRelX = null;
+        this.spillDir = (this.x <= btnRect.cx) ? -1 : 1;
+        this.vx = this.spillDir * (1.8 + Math.random() * 1.2);
+        this.vy = 0;
+        this.y = gy - this.size * 0.34;
+        this.vAngle = this.spillDir * (0.03 + Math.random() * 0.025);
+      }
+
+      updateSpilling() {
+        if (btnRect.width <= 0) { this.state = 'falling'; return; }
+        const dir = this.spillDir || 1;
+
+        // 持续侧向推力（不会被摆动抵消）→ 必然滑出按钮范围
+        this.vx += dir * 0.06;
+        this.vx *= 0.985;
+        if (Math.abs(this.vx) > 4.5) this.vx = 4.5 * dir;
+        this.x += this.vx;
+        this.angle += this.vAngle;
+        this.flip += 0.028;
+
+        // 贴着堆面滑行（翻过堆顶再落下）
+        const sx = Math.min(Math.max(this.x, pileLeft + 2), pileRight - 2);
+        const h = Math.max(0, pileHeightAt(sx));
+        const gy = pileTop - h;
+        this.y += (gy - this.size * 0.30 - this.y) * 0.28;
+
+        // 完全离开按钮脚印后才恢复自由下落
+        if (this.x < btnRect.left - this.size * 0.5 || this.x > btnRect.right + this.size * 0.5) {
+          this.state = 'falling';
+          this.vx = dir * (1.0 + Math.random() * 0.8);
+          this.vy = 0.4;
+        }
+      }
+
       beginSettle(gy, slope) {
         this.state = 'settling';
         this.isDrape = false;
@@ -789,7 +837,7 @@
         } else {
           this.state = 'falling';
           this.gaveUp = true;
-          this.homeX = null;
+          this.homeRelX = null;
           this.vx = dir * (0.7 + Math.random() * 0.8);
           this.vy = 0.2;
         }
@@ -933,7 +981,8 @@
       interceptedCount = 0;
       shelfState = 'accumulating';
       p1Petals.forEach(function(p) {
-        if (p.state === 'landed' || p.state === 'settling' || p.state === 'sliding' || p.state === 'contact') {
+        if (p.state === 'landed' || p.state === 'settling' || p.state === 'sliding' ||
+            p.state === 'contact' || p.state === 'spilling') {
           p.state = 'falling';
           p.isDrape = false;
           p.y -= 8;
@@ -1053,7 +1102,6 @@
       });
     }
 
-    // 红宣纸纹理（离屏生成一次）
     function buildPaperTexture() {
       const t = document.createElement('canvas');
       t.width = 512; t.height = 512;
@@ -1077,7 +1125,6 @@
       paperPattern = ctx.createPattern(t, 'repeat');
     }
 
-    // 文本排版 + 书写节奏 + 晕染参数
     function buildScrollLayout() {
       const paperW = Math.min(W * 0.92, 1020);
       const paperH = Math.max(230, Math.min(H * 0.46, 370));
@@ -1137,7 +1184,6 @@
       const startY = cy - totalH / 2 + lineH * 0.62;
       for (let i = 0; i < lineObjs.length; i++) lineObjs[i].y = startY + i * lineH;
 
-      // 书写节奏：普通 82ms、空格 36ms、句号 560ms、起笔酝酿 260ms
       const charEnd = [];
       let t = 260;
       for (let li = 0; li < lineObjs.length; li++) {
@@ -1149,7 +1195,6 @@
         }
       }
 
-      // 手写质感 + 晕染参数（每字独立）
       const charRot = [], charInk = [], charDy = [];
       const charBleed = [], wickLen = [], wickX = [], wickSlant = [];
       for (let i = 0; i < totalChars; i++) {
@@ -1174,7 +1219,6 @@
     function easeInOutQuad(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
     function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
 
-    // 逐字书写 + 墨迹晕染（在纸张 clip 内调用）
     function drawWrittenText() {
       const L = scrollLayout;
       const elapsed = (scrollPhase === 'writing') ? writeElapsed
@@ -1203,7 +1247,6 @@
           const cy = lo.y + L.charDy[gi];
 
           if (gi < idx) {
-            // —— 已写完：墨迹在生宣上晕开 ——
             const b = Math.min(1, Math.max(0, (elapsed - L.charEnd[gi]) / L.charBleed[gi]));
 
             if (b > 0.02) {
@@ -1219,7 +1262,6 @@
               ctx.restore();
             }
 
-            // 墨芯（随"干燥"微褪）
             ctx.save();
             ctx.translate(cx, cy);
             ctx.rotate(L.charRot[gi]);
@@ -1227,7 +1269,6 @@
             ctx.fillText(c.ch, 0, 0);
             ctx.restore();
 
-            // 顺纤维垂坠的细墨痕
             if (b > 0.15 && L.wickLen[gi] > 0) {
               ctx.strokeStyle = 'rgba(84,12,24,' + (0.12 * b).toFixed(3) + ')';
               ctx.lineWidth = 1;
@@ -1238,7 +1279,6 @@
               ctx.stroke();
             }
           } else if (gi === idx && c.ch !== ' ') {
-            // —— 正在落笔：墨滴收缩定形 ——
             const e = easeOutCubic(Math.max(0, Math.min(1, p)));
             ctx.save();
             ctx.translate(cx, cy - (1 - e) * 3);
@@ -1254,7 +1294,6 @@
       }
     }
 
-    // 木轴（圆柱高光 + 金色轴头）
     function drawRod(x, w, top, h) {
       ctx.save();
       const g = ctx.createLinearGradient(x, 0, x + w, 0);
@@ -1288,7 +1327,6 @@
       }
     }
 
-    // 卷轴整体渲染
     function renderScroll(alpha, now) {
       const L = scrollLayout;
       if (!L) return;
@@ -1499,6 +1537,7 @@
       ctx.clearRect(0, 0, W, H);
 
       if (currentState === 'invitation') {
+        refreshPileAnchors();
         updateShelfLifecycle();
         for (let i = 0; i < p1Petals.length; i++) p1Petals[i].update();
         drawPileMass();
@@ -1545,10 +1584,13 @@
       cardElem.classList.remove('blown');
       fireworks.length = 0;
       p1Petals.forEach(function(p) { p.dead = false; p.reset(); });
-      updateButtonRect();
       softResetPile();
-      setTimeout(updateButtonRect, 1300);
-      // 背景音乐继续播放（全程）
+
+      // 返回动画期间冻结测量，过渡结束后分三次校准
+      rectFrozen = true;
+      setTimeout(function() { rectFrozen = false; updateButtonRect(); }, 1900);
+      setTimeout(updateButtonRect, 2400);
+      setTimeout(updateButtonRect, 3000);
     });
 
     // ==========================================
@@ -1556,7 +1598,7 @@
     // ==========================================
     resize();
     updateButtonRect();
-    buildPetalSprites();   // 先渲染 24 张花瓣精灵图，再生成花瓣
+    buildPetalSprites();
     for (let i = 0; i < 225; i++) p1Petals.push(new InterceptablePetal(i < 160));
     setTimeout(updateButtonRect, 300);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(updateButtonRect);
