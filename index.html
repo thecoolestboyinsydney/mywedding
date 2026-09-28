@@ -45,6 +45,7 @@
       padding: 20px;
       z-index: 12;
       transition: opacity 1.1s ease;
+      will-change: opacity;
     }
     #splash.hidden { opacity: 0; pointer-events: none; }
     #splash.gone { display: none; }
@@ -54,13 +55,27 @@
       font-size: 14px; color: var(--ink-soft);
       letter-spacing: .16em; margin: 0 0 28px;
     }
+    /* 按钮行禁止换行，杜绝极窄屏下两按钮上下堆叠 */
     .splash-btns {
-      display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+      display: flex; gap: 16px; justify-content: center; flex-wrap: nowrap;
     }
-    .lang-btn { font-size: 17px; padding: 11px 32px; letter-spacing: 0.12em; }
+    /* ★ 尺寸统一修复：固定宽高 + flex 居中。
+       两个按钮不再由内容（不同字体/字距/文案长度）决定大小 */
+    .lang-btn {
+      width: 150px; height: 48px;
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 0 16px;
+      font-size: 17px; letter-spacing: 0.12em; text-indent: 0.12em;
+      white-space: nowrap;
+    }
     .lang-btn.lang-zh {
       font-family: 'Noto Serif SC', serif;
       letter-spacing: 0.3em; text-indent: 0.3em;
+    }
+    @media (max-width: 355px) {
+      .splash-btns { gap: 10px; }
+      .lang-btn { width: 132px; height: 46px; font-size: 15px; letter-spacing: 0.1em; text-indent: 0.1em; }
+      .lang-btn.lang-zh { font-size: 14px; letter-spacing: 0.24em; text-indent: 0.24em; }
     }
     @keyframes riseIn {
       from { opacity: 0; transform: translateY(16px); }
@@ -71,7 +86,7 @@
     .splash-inner > :nth-child(2) { animation-delay: 0.22s; }
     .splash-inner > :nth-child(3) { animation-delay: 0.34s; }
     .splash-inner > :nth-child(4) { animation-delay: 0.46s; }
-    .splash-inner > :nth-child(5) { animation-delay: 0.58s; }
+    .splash-inner > :nth-child(5) { animation-delay: 0.46s; }
 
     /* ==========================================
        请柬页
@@ -85,13 +100,13 @@
       overscroll-behavior: contain;
       transition: opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
       z-index: 10;
+      will-change: transform, opacity;
     }
     #page1.hidden {
       opacity: 0;
       transform: scale(0.93);
       pointer-events: none;
     }
-    /* 语言切换：同页两卡，只显示当前语言 */
     #page1 .card { display: none; }
     #page1.lang-en .card-en { display: block; }
     #page1.lang-zh .card-zh { display: block; }
@@ -108,6 +123,7 @@
       text-align: center;
       box-shadow: 0 32px 70px -16px rgba(50, 15, 25, 0.35);
       transition: opacity 1.3s ease 0.45s, transform 1.3s cubic-bezier(0.45, 0, 0.7, 0.4) 0.45s;
+      will-change: transform, opacity;
     }
     .card.blown {
       opacity: 0;
@@ -149,7 +165,6 @@
     .place { font-size: 17.5px; color: var(--ink); font-weight: 500; margin: 0 0 4px; }
     .addr { font-size: 13.5px; color: var(--ink-soft); margin: 0 0 4px; }
 
-    /* 中文卡片字体适配 */
     .card-zh { font-family: 'Noto Serif SC', serif; }
     .card-zh .names { font-style: normal; letter-spacing: 0.08em; }
     .card-zh .eyebrow { font-size: 14px; letter-spacing: .42em; text-indent: .42em; }
@@ -176,6 +191,7 @@
       font-weight: 600;
       font-size: 19px;
       letter-spacing: 0.18em;
+      text-indent: 0.18em;
       text-transform: none;
       color: #fffaf3;
       background: linear-gradient(180deg, var(--btn-grad-start) 0%, var(--btn-grad-end) 100%);
@@ -221,16 +237,24 @@
       pointer-events: auto;
     }
 
+    /* ==========================================
+       底部控制条（烟花页）
+       ★ 尺寸统一修复：等分布局——两按钮严格等宽，
+         与文案长度无关；固定高度；图标列定宽对齐
+       ========================================== */
     .controls {
       position: fixed; bottom: 24px; left: 50%;
       transform: translateX(-50%);
-      display: flex; gap: 14px;
+      display: flex; gap: 12px; flex-wrap: wrap;
+      width: min(400px, calc(100vw - 32px));
       z-index: 60;
       opacity: 0; pointer-events: none;
       transition: opacity 1s ease 0.4s;
     }
     .controls.visible { opacity: 1; pointer-events: auto; }
     .ctrl-btn {
+      flex: 1 1 150px;
+      height: 42px;
       background: rgba(255, 255, 255, 0.14);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
@@ -238,17 +262,24 @@
       border-radius: 30px;
       color: #f7e6eb;
       font-family: 'Cormorant Garamond', 'Noto Serif SC', serif;
-      font-size: 15px;
-      letter-spacing: 0.1em;
-      padding: 8px 18px;
+      font-size: 14px;
+      letter-spacing: 0.05em;
+      padding: 0 10px;
       cursor: pointer;
       touch-action: manipulation;
-      display: flex; align-items: center; gap: 6px;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      white-space: nowrap;
       transition: all 0.25s ease;
     }
     .ctrl-btn:hover {
       background: rgba(255, 255, 255, 0.26);
       transform: translateY(-2px);
+    }
+    /* 图标固定列宽：两个按钮的文字起始位置完全对齐 */
+    .ctrl-btn .cicon {
+      flex: none;
+      width: 1.25em;
+      text-align: center;
     }
   </style>
 </head>
@@ -312,10 +343,10 @@
 
   <div class="controls" id="controls">
     <button class="ctrl-btn" id="soundToggle">
-      <span id="soundIcon">🔔</span> <span id="soundText">Sound On</span>
+      <span class="cicon" id="soundIcon">🔔</span> <span id="soundText">Sound On</span>
     </button>
     <button class="ctrl-btn" id="backBtn">
-      <span>✉️</span> <span id="backBtnText">View Invitation</span>
+      <span class="cicon">✉️</span> <span id="backBtnText">View Invitation</span>
     </button>
   </div>
 
@@ -341,12 +372,22 @@
 
     // 'splash' → 'invitation' → 'windout' → 'scroll'
     let currentState = 'splash';
-    let langMode = 'en';                 // 'en' | 'zh'
+    let langMode = 'en';
     let activeAcceptBtn = acceptBtnEn;
-    let currentMaxShelf = 40;            // 开屏按钮带堆积上限（进入请柬后 100）
-    const SPLASH_ACTIVE_PETALS = 150;    // 开屏阶段激活的花瓣数（请柬阶段 225 全开）
+    let currentMaxShelf = 40;
+    const SPLASH_ACTIVE_PETALS = 150;
 
     function currentCard() { return (langMode === 'en') ? cardEn : cardZh; }
+
+    // ==========================================
+    // 自适应质量（性能保险丝）
+    // ==========================================
+    let qualityLevel = 2;
+    let qualityDprCap = 2;
+    let qualityMaxPetals = 225;
+    let qualityShadows = true;
+    const perf = { acc: 0, n: 0, lastCheck: 0, lastChange: 0 };
+    let perfWarmupEnd = 0;
 
     function applyLanguageTexts() {
       const en = (langMode === 'en');
@@ -358,7 +399,7 @@
 
     let W = 0, H = 0, dpr = 1;
     function resize() {
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      dpr = Math.min(window.devicePixelRatio || 1, qualityDprCap);
       W = window.innerWidth;
       H = window.innerHeight;
       canvas.width = W * dpr;
@@ -378,10 +419,9 @@
 
     // ==========================================
     // 拦截目标几何 + 花瓣山高度场
-    // 目标随状态切换：开屏=两语言按钮组合带；请柬=当前语言的 Accept 按钮
     // ==========================================
     let btnRect = { left: 0, right: 0, top: 0, bottom: 0, width: 0, cx: 0 };
-    let rectFrozen = false;   // 过渡动画期间冻结测量
+    let rectFrozen = false;
 
     const PILE_BINS = 30;
     const pileHeights = new Float32Array(PILE_BINS);
@@ -428,10 +468,31 @@
       add(c - 1, 0.22); add(c, 0.56); add(c + 1, 0.22);
     }
 
+    // —— pileOrder 索引化：增删均为 O(1)（swap-remove）——
+    function pileAdd(p) {
+      p.pileIdx = pileOrder.length;
+      pileOrder.push(p);
+    }
+    function pileRemove(p) {
+      const i = p.pileIdx;
+      p.pileIdx = -1;
+      if (i < 0 || i >= pileOrder.length || pileOrder[i] !== p) return false;
+      const last = pileOrder.length - 1;
+      const moved = pileOrder[last];
+      pileOrder[i] = moved;
+      moved.pileIdx = i;
+      pileOrder.pop();
+      p.pileIdx = -1;
+      return true;
+    }
+    function pileClear() {
+      for (let i = 0; i < pileOrder.length; i++) pileOrder[i].pileIdx = -1;
+      pileOrder.length = 0;
+    }
+
     function updateButtonRect() {
       if (rectFrozen) return;
       if (currentState === 'splash') {
-        // 开屏：两语言按钮 + 中间空隙 = 一条组合拦截带
         if (splashEl.classList.contains('hidden')) return;
         const r1 = langEnBtn.getBoundingClientRect();
         const r2 = langZhBtn.getBoundingClientRect();
@@ -445,7 +506,6 @@
           width: right - left, cx: (left + right) / 2
         };
       } else {
-        // 请柬：当前语言的 Accept 按钮
         if (page1.classList.contains('hidden')) return;
         if (currentCard().classList.contains('blown')) return;
         const r = activeAcceptBtn.getBoundingClientRect();
@@ -470,13 +530,18 @@
     window.addEventListener('resize', function() {
       resize();
       updateButtonRect();
-      if (currentState === 'scroll' && scrollLayout) {
-        const idx = (scrollPhase === 'writing') ? curCharIdx : scrollLayout.totalChars;
-        scrollLayout = null;
-        buildScrollLayout();
-        if (scrollPhase === 'writing' && scrollLayout) {
-          writeElapsed = idx > 0 ? scrollLayout.charEnd[idx - 1] : 0;
+      if (scrollLayout) {
+        if (currentState === 'scroll') {
+          const idx = (scrollPhase === 'writing') ? curCharIdx : scrollLayout.totalChars;
+          scrollLayout = null;
+          buildScrollLayout();
+          if (scrollPhase === 'writing' && scrollLayout) {
+            writeElapsed = idx > 0 ? scrollLayout.charEnd[idx - 1] : 0;
+          }
+        } else {
+          scrollLayout = null;
         }
+        resetInkLayer();
       }
     });
 
@@ -664,7 +729,7 @@
     }
 
     // ==========================================
-    // 花瓣物理：全员拦截（开屏/请柬共用同一套）
+    // 花瓣物理：全员拦截
     // ==========================================
     let interceptedCount = 0;
     let shelfState = 'accumulating';
@@ -679,13 +744,13 @@
         this.state = 'falling';
         this.dead = false;
         this.active = true;
+        this.pileIdx = -1;
         this.reset(true);
       }
 
       reset(init) {
-        if (this.state === 'landed') {
-          const i = pileOrder.indexOf(this);
-          if (i >= 0) { pileOrder.splice(i, 1); interceptedCount = Math.max(0, interceptedCount - 1); }
+        if (this.state === 'landed' && pileRemove(this)) {
+          interceptedCount = Math.max(0, interceptedCount - 1);
         }
         this.state = 'falling';
         this.isDrape = false;
@@ -737,15 +802,15 @@
         this.vy = this.termV * 0.5;
       }
 
-      update() {
+      update(now) {
         switch (this.state) {
-          case 'falling':  this.updateFalling();  break;
-          case 'contact':  this.updateContact();  break;
-          case 'sliding':  this.updateSliding();  break;
-          case 'spilling': this.updateSpilling(); break;
-          case 'settling': this.updateSettling(); break;
-          case 'landed':   this.updateLanded();   break;
-          case 'blowing':  this.updateBlowing();  break;
+          case 'falling':  this.updateFalling();       break;
+          case 'contact':  this.updateContact();       break;
+          case 'sliding':  this.updateSliding();       break;
+          case 'spilling': this.updateSpilling();      break;
+          case 'settling': this.updateSettling();      break;
+          case 'landed':   this.updateLanded(now);     break;
+          case 'blowing':  this.updateBlowing(now);    break;
         }
       }
 
@@ -985,7 +1050,7 @@
 
         interceptedCount++;
         this.landOffset = interceptedCount;
-        pileOrder.push(this);
+        pileAdd(this);
 
         for (let i = 0; i < pileOrder.length; i++) {
           const q = pileOrder[i];
@@ -1000,28 +1065,27 @@
         }
       }
 
-      updateLanded() {
+      updateLanded(now) {
         this.x = btnRect.left + this.restRelX;
         this.y = btnRect.top + this.restDY;
 
         if (shelfState === 'blowing') {
-          if (Date.now() - windBlastTimer >= this.dislodgeDelay) { this.dislodge(); return; }
+          if (now - windBlastTimer >= this.dislodgeDelay) { this.dislodge(); return; }
         }
 
-        const t = Date.now() * 0.0022 + this.landOffset * 1.7;
+        const t = now * 0.0022 + this.landOffset * 1.7;
         const amp = 0.12 + this.expo * 0.3;
         this.x += Math.sin(t) * amp * 0.8;
         this.y += Math.cos(t * 1.31) * amp * 0.55;
 
         if (this.jolt > 0.02) {
-          this.y += Math.sin(Date.now() * 0.045 + this.landOffset * 2.3) * this.jolt;
+          this.y += Math.sin(now * 0.045 + this.landOffset * 2.3) * this.jolt;
           this.jolt *= 0.88;
         }
       }
 
       dislodge() {
-        const i = pileOrder.indexOf(this);
-        if (i >= 0) pileOrder.splice(i, 1);
+        pileRemove(this);
         this.state = 'blowing';
         this.isDrape = false;
         const dir = (windStyleIndex === 2) ? -1 : 1;
@@ -1032,7 +1096,7 @@
         this.alpha = 0.95;
       }
 
-      updateBlowing() {
+      updateBlowing(now) {
         switch (windStyleIndex) {
           case 0: this.vx += 0.28; break;
           case 1: this.vx += Math.cos(this.y * 0.02 + this.seed) * 0.42; break;
@@ -1041,7 +1105,7 @@
           case 4: this.vx += 0.24; this.x += Math.sin(this.y * 0.05) * 1.7; break;
         }
         this.vx *= 0.99;
-        this.vy = this.vy * 0.985 + 0.05 + Math.sin(Date.now() * 0.008 + this.seed) * 0.05;
+        this.vy = this.vy * 0.985 + 0.05 + Math.sin(now * 0.008 + this.seed) * 0.05;
         this.x += this.vx;
         this.y += this.vy;
         this.angle += this.vAngle;
@@ -1054,6 +1118,8 @@
       }
 
       draw(ctx) {
+        // 屏外花瓣（顶部等待区/侧向离场）直接跳过绘制
+        if (this.y < -28 || this.x < -30 || this.x > W + 30) return;
         let s = this.size;
         if (this.state === 'settling') {
           s = this.size * (1 - 0.09 * Math.sin(Math.PI * Math.min(1, this.settleT)));
@@ -1062,11 +1128,11 @@
       }
     }
 
-    function updateShelfLifecycle() {
+    function updateShelfLifecycle(now) {
       if (shelfState === 'resting') {
-        if (Date.now() - restTimer > 2200) {
+        if (now - restTimer > 2200) {
           shelfState = 'blowing';
-          windBlastTimer = Date.now();
+          windBlastTimer = now;
           let maxH = 0;
           for (let i = 0; i < PILE_BINS; i++) if (pileHeights[i] > maxH) maxH = pileHeights[i];
           p1Petals.forEach(function(p) {
@@ -1078,9 +1144,9 @@
         }
       } else if (shelfState === 'blowing') {
         for (let i = 0; i < PILE_BINS; i++) pileHeights[i] *= 0.985;
-        if (Date.now() - windBlastTimer > 3000) {
+        if (now - windBlastTimer > 3000) {
           p1Petals.forEach(function(p) { if (p.state === 'landed') p.dislodge(); });
-          pileOrder.length = 0;
+          pileClear();
           pileHeights.fill(0);
           interceptedCount = 0;
           shelfState = 'accumulating';
@@ -1091,7 +1157,7 @@
 
     function softResetPile() {
       pileHeights.fill(0);
-      pileOrder.length = 0;
+      pileClear();
       interceptedCount = 0;
       shelfState = 'accumulating';
       p1Petals.forEach(function(p) {
@@ -1146,26 +1212,58 @@
     }
 
     // ==========================================
+    // 自适应质量：花瓣预算应用
+    // ==========================================
+    function targetPetalCount() {
+      return (currentState === 'splash')
+        ? Math.min(SPLASH_ACTIVE_PETALS, qualityMaxPetals)
+        : qualityMaxPetals;
+    }
+
+    function applyPetalBudget() {
+      const budget = targetPetalCount();
+      for (let i = 0; i < p1Petals.length; i++) {
+        const p = p1Petals[i];
+        if (i < budget) {
+          if (!p.active) { p.active = true; p.dead = false; p.reset(); }
+        } else if (p.active) {
+          if (p.state === 'landed' && pileRemove(p)) {
+            interceptedCount = Math.max(0, interceptedCount - 1);
+          }
+          p.active = false;
+          p.dead = true;
+        }
+      }
+    }
+
+    function setQuality(level) {
+      qualityLevel = level;
+      perf.lastChange = Date.now();
+      qualityDprCap = [1, 1.5, 2][level];
+      qualityMaxPetals = [130, 170, 225][level];
+      qualityShadows = (level >= 1);
+      resize();
+      if (currentState === 'splash' || currentState === 'invitation') applyPetalBudget();
+    }
+
+    // ==========================================
     // 开屏 → 请柬：语言切换
     // ==========================================
     function switchToInvitation(lang) {
       langMode = lang;
       activeAcceptBtn = (lang === 'en') ? acceptBtnEn : acceptBtnZh;
       applyLanguageTexts();
-      currentMaxShelf = 100;               // 请柬页堆积上限
+      currentMaxShelf = 100;
       currentState = 'invitation';
 
-      // 开屏淡出，1.2s 后彻底移出 DOM
       splashEl.classList.add('hidden');
       setTimeout(function() { splashEl.classList.add('gone'); }, 1200);
 
-      // 切换请柬卡片语言并淡入
       page1.classList.remove('lang-en', 'lang-zh');
       page1.classList.add('lang-' + lang);
       page1.classList.remove('hidden');
 
-      // 全部花瓣重新从顶部入场（含激活开屏阶段未启用的 75 片）
-      pileOrder.length = 0;
+      pileClear();
       pileHeights.fill(0);
       interceptedCount = 0;
       shelfState = 'accumulating';
@@ -1174,8 +1272,8 @@
         p.dead = false;
         p.reset();
       });
+      applyPetalBudget();
 
-      // 请柬淡入动画期间冻结测量，过渡结束后校准到 Accept 按钮
       rectFrozen = true;
       setTimeout(function() { rectFrozen = false; updateButtonRect(); }, 1500);
       setTimeout(updateButtonRect, 2100);
@@ -1202,7 +1300,7 @@
     function startWindOut() {
       currentState = 'windout';
       windoutStart = Date.now();
-      pileOrder.length = 0;
+      pileClear();
       pileHeights.fill(0);
       p1Petals.forEach(function(p) {
         p.state = 'windout';
@@ -1262,6 +1360,9 @@
     let scrollLayout = null;
     let paperPattern = null;
 
+    // —— 静墨缓存层：晕染定形的字符一次性盖章，此后每帧只 blit ——
+    let inkLayer = null, inkCtx = null, inkStamped = null, inkKey = '';
+
     function setScrollPhase(p) { scrollPhase = p; phaseElapsed = 0; }
 
     function enterScrollScene() {
@@ -1269,10 +1370,67 @@
       page1.classList.add('hidden');
       scrollRawT = 0; writeElapsed = 0; curCharIdx = 0;
       setScrollPhase('opening');
+      resetInkLayer();
       if (!paperPattern) buildPaperTexture();
       fontsReady.then(function() {
         if (currentState === 'scroll' && !scrollLayout) buildScrollLayout();
       });
+    }
+
+    function resetInkLayer() {
+      inkLayer = null; inkCtx = null; inkStamped = null; inkKey = '';
+    }
+
+    function ensureInkLayer() {
+      const L = scrollLayout;
+      if (!L) return;
+      const key = ((L.paperW * dpr) | 0) + 'x' + ((L.paperH * dpr) | 0);
+      if (inkLayer && inkKey === key) return;
+      inkLayer = document.createElement('canvas');
+      inkLayer.width = Math.max(1, (L.paperW * dpr) | 0);
+      inkLayer.height = Math.max(1, (L.paperH * dpr) | 0);
+      inkCtx = inkLayer.getContext('2d');
+      inkCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      inkStamped = new Uint8Array(L.totalChars);
+      inkKey = key;
+    }
+
+    function stampChar(c, lx, ly, gi) {
+      const L = scrollLayout;
+      if (!inkCtx) return;
+      inkCtx.font = scrollFont(L.fs);
+      inkCtx.textAlign = 'center';
+      inkCtx.textBaseline = 'alphabetic';
+      const rot = L.charRot[gi];
+
+      inkCtx.save();
+      inkCtx.translate(lx, ly);
+      inkCtx.rotate(rot);
+      inkCtx.scale(1.05, 1.05);
+      inkCtx.shadowColor = 'rgba(84,12,24,0.36)';
+      inkCtx.shadowBlur = L.fs * 0.34;
+      inkCtx.fillStyle = 'rgba(84,12,24,0.30)';
+      inkCtx.fillText(c.ch, 0, 0);
+      inkCtx.restore();
+
+      inkCtx.save();
+      inkCtx.translate(lx, ly);
+      inkCtx.rotate(rot);
+      inkCtx.fillStyle = 'rgba(40,14,24,' + (L.charInk[gi] * 0.90).toFixed(3) + ')';
+      inkCtx.fillText(c.ch, 0, 0);
+      inkCtx.restore();
+
+      if (L.wickLen[gi] > 0) {
+        inkCtx.strokeStyle = 'rgba(84,12,24,0.12)';
+        inkCtx.lineWidth = 1;
+        inkCtx.beginPath();
+        const wx = lx + L.wickX[gi];
+        inkCtx.moveTo(wx, ly - L.fs * 0.08);
+        inkCtx.lineTo(wx + L.wickSlant[gi], ly - L.fs * 0.08 + L.wickLen[gi]);
+        inkCtx.stroke();
+      }
+
+      inkStamped[gi] = 1;
     }
 
     function buildPaperTexture() {
@@ -1376,7 +1534,6 @@
       const startY = cy - totalH / 2 + lineH * (isZh ? 0.66 : 0.62);
       for (let i = 0; i < lineObjs.length; i++) lineObjs[i].y = startY + i * lineH;
 
-      // 书写节奏：英文 82/36/560；中文毛笔 240/300/520
       const charEnd = [];
       let t = isZh ? 400 : 260;
       for (let li = 0; li < lineObjs.length; li++) {
@@ -1435,6 +1592,10 @@
       ctx.textAlign = 'center';
       ctx.textBaseline = 'alphabetic';
 
+      const paperL = L.cx - L.paperW / 2;
+      const paperT = L.cy - L.paperH / 2;
+      const canStamp = !!inkCtx;
+
       let gi = 0;
       for (let li = 0; li < L.lineObjs.length; li++) {
         const lo = L.lineObjs[li];
@@ -1444,8 +1605,9 @@
           const cy = lo.y + L.charDy[gi];
 
           if (gi < idx) {
-            // 已写完：墨迹在生宣上晕开
             const b = Math.min(1, Math.max(0, (elapsed - L.charEnd[gi]) / L.charBleed[gi]));
+
+            if (b >= 1 && canStamp && inkStamped[gi]) { gi++; continue; }
 
             if (b > 0.02) {
               ctx.save();
@@ -1476,8 +1638,9 @@
               ctx.lineTo(wx + L.wickSlant[gi], cy - L.fs * 0.08 + L.wickLen[gi] * b);
               ctx.stroke();
             }
+
+            if (b >= 1 && canStamp) stampChar(c, cx - paperL, cy - paperT, gi);
           } else if (gi === idx && c.ch !== ' ') {
-            // 正在落笔：墨滴收缩定形
             const e = easeOutCubic(Math.max(0, Math.min(1, p)));
             ctx.save();
             ctx.translate(cx, cy - (1 - e) * 3);
@@ -1590,6 +1753,10 @@
       ctx.fillRect(paperLeft, paperTop + L.paperH - 2.5, openW, 2.5);
 
       if (scrollPhase === 'writing' || scrollPhase === 'pausing' || scrollPhase === 'closing') {
+        ensureInkLayer();
+        if (inkLayer) {
+          ctx.drawImage(inkLayer, L.cx - L.paperW / 2, L.cy - L.paperH / 2, L.paperW, L.paperH);
+        }
         drawWrittenText();
       }
       ctx.restore();
@@ -1600,56 +1767,72 @@
       ctx.restore();
     }
 
-    // —— 烟花系统 ——
+    // —— 烟花系统：光晕精灵 + 加法混合 + 对象池 ——
     const fireworks = [];
     const FW_COLORS = ['#ffd166', '#ffe9b8', '#fb6f92', '#ffc8dd', '#ff9e6d', '#f3c4fb', '#ffffff'];
 
-    class FireworkParticle {
-      constructor(x, y, color) {
-        this.x = x; this.y = y; this.color = color;
-        const angle = Math.random() * Math.PI * 2;
-        const speed = 2 + Math.random() * 6;
-        this.vx = Math.cos(angle) * speed;
-        this.vy = Math.sin(angle) * speed;
-        this.alpha = 1;
-        this.decay = 0.015 + Math.random() * 0.02;
-        this.gravity = 0.08;
-        this.size = 2 + Math.random() * 2;
-      }
-      update() {
-        this.vx *= 0.96; this.vy *= 0.96;
-        this.vy += this.gravity;
-        this.x += this.vx; this.y += this.vy;
-        this.alpha -= this.decay;
-      }
-      draw(ctx) {
-        if (this.alpha <= 0) return;
-        ctx.save();
-        ctx.globalAlpha = this.alpha;
-        ctx.fillStyle = this.color;
-        ctx.shadowBlur = 8;
-        ctx.shadowColor = this.color;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      }
+    const FW_GLOWS = FW_COLORS.map(function(color) {
+      const c = document.createElement('canvas');
+      c.width = 48; c.height = 48;
+      const g = c.getContext('2d');
+      const rg = g.createRadialGradient(24, 24, 0, 24, 24, 24);
+      rg.addColorStop(0, '#ffffff');
+      rg.addColorStop(0.3, color);
+      rg.addColorStop(1, 'rgba(0,0,0,0)');
+      g.fillStyle = rg;
+      g.fillRect(0, 0, 48, 48);
+      return c;
+    });
+
+    const fwPool = [];
+    function fwSpawn(x, y, glow) {
+      const p = fwPool.pop() || { x: 0, y: 0, vx: 0, vy: 0, alpha: 1, decay: 0.02, size: 2, glow: null };
+      p.x = x; p.y = y; p.glow = glow;
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 2 + Math.random() * 6;
+      p.vx = Math.cos(angle) * speed;
+      p.vy = Math.sin(angle) * speed;
+      p.alpha = 1;
+      p.decay = 0.015 + Math.random() * 0.02;
+      p.size = 2 + Math.random() * 2;
+      return p;
     }
 
     function createFirework(x, y) {
       playPop();
-      const color = FW_COLORS[Math.floor(Math.random() * FW_COLORS.length)];
+      const glow = FW_GLOWS[(Math.random() * FW_GLOWS.length) | 0];
       const count = 35 + Math.floor(Math.random() * 30);
-      for (let i = 0; i < count; i++) fireworks.push(new FireworkParticle(x, y, color));
+      for (let i = 0; i < count; i++) fireworks.push(fwSpawn(x, y, glow));
     }
 
     function drawFireworksParticles() {
+      if (fireworks.length === 0) return;
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
       for (let i = fireworks.length - 1; i >= 0; i--) {
         const p = fireworks[i];
-        p.update();
-        if (p.alpha <= 0) fireworks.splice(i, 1);
-        else p.draw(ctx);
+        p.vx *= 0.96; p.vy *= 0.96;
+        p.vy += 0.08;
+        p.x += p.vx; p.y += p.vy;
+        p.alpha -= p.decay;
+        if (p.alpha <= 0) {
+          fireworks[i] = fireworks[fireworks.length - 1];
+          fireworks.pop();
+          if (fwPool.length < 600) fwPool.push(p);
+        } else {
+          const d = p.size * 6;
+          ctx.globalAlpha = p.alpha;
+          ctx.drawImage(p.glow, p.x - d / 2, p.y - d / 2, d, d);
+        }
       }
+      ctx.restore();
+    }
+
+    function clearFireworks() {
+      for (let i = 0; i < fireworks.length; i++) {
+        if (fwPool.length < 600) fwPool.push(fireworks[i]);
+      }
+      fireworks.length = 0;
     }
 
     function salvo(n) {
@@ -1725,7 +1908,7 @@
     }
 
     // ==========================================
-    // 渲染主循环
+    // 渲染主循环（含自适应质量监测）
     // ==========================================
     let lastLoopT = 0;
     function loop(ts) {
@@ -1735,14 +1918,30 @@
       const now = Date.now();
       ctx.clearRect(0, 0, W, H);
 
+      // —— 性能监测：预热 2.5s 内不统计；dt>45 的异常帧（切标签页等）不统计 ——
+      if (now > perfWarmupEnd) {
+        if (dt <= 45) { perf.acc += dt; perf.n++; }
+        if (perf.n >= 12 && now - perf.lastCheck >= 1000) {
+          const avg = perf.acc / perf.n;
+          if (avg > 24 && qualityLevel > 0) {
+            setQuality(qualityLevel - 1);
+          } else if (avg < 13 && qualityLevel < 2 && now - perf.lastChange > 8000) {
+            setQuality(qualityLevel + 1);
+          }
+          perf.acc = 0; perf.n = 0; perf.lastCheck = now;
+        }
+      }
+
       if (currentState === 'splash' || currentState === 'invitation') {
+        // 落地前持续校准目标几何（覆盖开屏入场动画期间的测量漂移）
+        if (interceptedCount === 0 && !rectFrozen) updateButtonRect();
         refreshPileAnchors();
-        updateShelfLifecycle();
+        updateShelfLifecycle(now);
         for (let i = 0; i < p1Petals.length; i++) {
-          if (p1Petals[i].active) p1Petals[i].update();
+          if (p1Petals[i].active) p1Petals[i].update(now);
         }
         drawPileMass();
-        drawPileContactShadows();
+        if (qualityShadows) drawPileContactShadows();
         for (let i = 0; i < pileOrder.length; i++) pileOrder[i].draw(ctx);
         for (let i = 0; i < p1Petals.length; i++) {
           const p = p1Petals[i];
@@ -1779,7 +1978,6 @@
     });
 
     backBtn.addEventListener('click', function() {
-      // 返回当前语言的请柬页（语言保持，不回开屏）
       currentState = 'invitation';
       setScrollPhase('idle');
       scrollRawT = 0; writeElapsed = 0; curCharIdx = 0;
@@ -1788,26 +1986,27 @@
       page1.classList.remove('hidden');
       cardEn.classList.remove('blown');
       cardZh.classList.remove('blown');
-      fireworks.length = 0;
-      p1Petals.forEach(function(p) { p.active = true; p.dead = false; p.reset(); });
+      clearFireworks();
+      p1Petals.forEach(function(p) { p.dead = false; p.reset(); });
       softResetPile();
+      applyPetalBudget();
 
       rectFrozen = true;
       setTimeout(function() { rectFrozen = false; updateButtonRect(); }, 1900);
       setTimeout(updateButtonRect, 2400);
       setTimeout(updateButtonRect, 3000);
-      // 背景音乐继续播放
     });
 
     // ==========================================
     // 初始化
     // ==========================================
+    perfWarmupEnd = Date.now() + 2500;
     resize();
-    updateButtonRect();          // 测量开屏两按钮组合带
+    updateButtonRect();
     buildPetalSprites();
     for (let i = 0; i < 225; i++) {
       const p = new InterceptablePetal(i < 160);
-      p.active = (i < SPLASH_ACTIVE_PETALS);   // 开屏阶段先激活 150 片
+      p.active = (i < SPLASH_ACTIVE_PETALS);
       if (!p.active) p.dead = true;
       p1Petals.push(p);
     }
